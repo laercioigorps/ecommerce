@@ -1,5 +1,7 @@
 from django.db import models
 
+from ecommerce.models import TimeStampedModel
+
 # Create your models here.
 
 
@@ -8,7 +10,7 @@ class Brand(models.Model):
     description = models.TextField(default="")
 
 
-class Category(models.Model):
+class Category(TimeStampedModel):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
