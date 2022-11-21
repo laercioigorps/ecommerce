@@ -6,3 +6,8 @@ from django.db import models
 class Brand(models.Model):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=60)
+    description = models.TextField(default="")
