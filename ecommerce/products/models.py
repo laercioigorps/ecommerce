@@ -17,3 +17,8 @@ class Category(models.Model):
 class ProductType(models.Model):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
+
+
+class Size(models.Model):
+    name = models.CharField(max_length=60)
+    description = models.TextField(default="")
