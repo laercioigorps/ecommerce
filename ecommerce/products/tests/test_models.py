@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 
 from ecommerce.products.models import Brand, Category, Colour, ProductType, Size
@@ -21,6 +23,12 @@ def test_create_category():
     Category.objects.create(name="someCategory", description="some description")
     catogories_count = Category.objects.all().count()
     assert catogories_count == 1
+
+
+def test_category_has_timestamped_info(category):
+    today = date.today()
+    assert category.created_at.date() == today
+    assert category.updated_at.date() == today
 
 
 @pytest.mark.django_db
