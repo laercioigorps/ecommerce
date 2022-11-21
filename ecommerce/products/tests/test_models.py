@@ -21,3 +21,16 @@ def test_create_category():
     Category.objects.create(name="someCategory", description="some description")
     catogories_count = Category.objects.all().count()
     assert catogories_count == 1
+
+
+@pytest.mark.django_db
+def test_create_category_with_parent_category():
+    parent = Category.objects.create(
+        name="father", description="some father description"
+    )
+    category = Category.objects.create(
+        name="children", description="some child description", parent=parent
+    )
+    catogories_count = Category.objects.all().count()
+    assert catogories_count == 2
+    assert category.parent.id == parent.id
