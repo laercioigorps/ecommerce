@@ -5,7 +5,7 @@ from ecommerce.models import TimeStampedModel
 # Create your models here.
 
 
-class Brand(models.Model):
+class Brand(TimeStampedModel):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
 
