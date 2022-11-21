@@ -22,3 +22,8 @@ class ProductType(models.Model):
 class Size(models.Model):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
+
+
+class Colour(models.Model):
+    name = models.CharField(max_length=30)
+    description = models.TextField(default="")
