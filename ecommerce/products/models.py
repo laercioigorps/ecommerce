@@ -11,3 +11,4 @@ class Brand(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
