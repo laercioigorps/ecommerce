@@ -1,6 +1,6 @@
 import pytest
 
-from ecommerce.products.models import Brand, Category, ProductType, Size
+from ecommerce.products.models import Brand, Category, Colour, ProductType, Size
 
 
 @pytest.mark.django_db
@@ -48,3 +48,10 @@ def test_create_product_size():
     Size.objects.create(name="XG", description="someDescription")
     sizes_count = Size.objects.all().count()
     assert sizes_count == 1
+
+
+@pytest.mark.django_db
+def test_create_product_color():
+    Colour.objects.create(name="someColour", description="some colour description")
+    colours_count = Colour.objects.all().count()
+    assert colours_count == 1
