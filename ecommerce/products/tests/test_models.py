@@ -1,6 +1,6 @@
 import pytest
 
-from ecommerce.products.models import Brand, Category
+from ecommerce.products.models import Brand, Category, ProductType
 
 
 @pytest.mark.django_db
@@ -34,3 +34,10 @@ def test_create_category_with_parent_category():
     catogories_count = Category.objects.all().count()
     assert catogories_count == 2
     assert category.parent.id == parent.id
+
+
+@pytest.mark.django_db
+def test_create_type():
+    ProductType.objects.create(name="some", description="some description")
+    product_type_count = ProductType.objects.all().count()
+    assert product_type_count == 1
