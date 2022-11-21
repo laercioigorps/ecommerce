@@ -17,6 +17,11 @@ class TestBrand:
         brand_count = Brand.objects.all().count()
         assert brand_count == 1
 
+    def test_brand_has_timestamped_info(self, brand):
+        today = date.today()
+        assert brand.created_at.date() == today
+        assert brand.updated_at.date() == today
+
 
 class TestCategory:
     @pytest.mark.django_db
