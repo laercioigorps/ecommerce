@@ -67,6 +67,9 @@ class TestProductType:
         product_type_count = ProductType.objects.all().count()
         assert product_type_count == 1
 
+    def test_productType_is_timestamped(self, productType):
+        assertIsTimestamped(productType)
+
 
 class TestProductSize:
     def test_size_fixture_is_valid(self, size):
