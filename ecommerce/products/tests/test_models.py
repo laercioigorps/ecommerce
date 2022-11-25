@@ -58,6 +58,9 @@ class TestCategory:
 
 
 class TestProductType:
+    def test_Type_fixture_is_valid(self, productType):
+        assert isinstance(productType, ProductType)
+
     @pytest.mark.django_db
     def test_create_type(self):
         ProductType.objects.create(name="some", description="some description")
@@ -66,6 +69,9 @@ class TestProductType:
 
 
 class TestProductSize:
+    def test_size_fixture_is_valid(self, size):
+        assert isinstance(size, Size)
+
     @pytest.mark.django_db
     def test_create_product_size(self):
         Size.objects.create(name="XG", description="someDescription")
@@ -79,3 +85,6 @@ class TestProductColour:
         Colour.objects.create(name="someColour", description="some colour description")
         colours_count = Colour.objects.all().count()
         assert colours_count == 1
+
+    def test_colour_fixture_is_valid(self, colour):
+        assert isinstance(colour, Colour)
