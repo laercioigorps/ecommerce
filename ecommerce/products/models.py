@@ -16,7 +16,7 @@ class Category(TimeStampedModel):
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
 
 
-class ProductType(models.Model):
+class ProductType(TimeStampedModel):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
 
