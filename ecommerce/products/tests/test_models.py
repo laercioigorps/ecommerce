@@ -5,6 +5,12 @@ import pytest
 from ecommerce.products.models import Brand, Category, Colour, ProductType, Size
 
 
+def assertIsTimestamped(model):
+    today = date.today()
+    assert model.created_at.date() == today
+    assert model.updated_at.date() == today
+
+
 class TestBrand:
     @pytest.mark.django_db
     def test_count_brand_equals_0(self):
@@ -46,6 +52,9 @@ class TestCategory:
         catogories_count = Category.objects.all().count()
         assert catogories_count == 2
         assert category.parent.id == parent.id
+
+    def test_category_is_timestamped(self, category):
+        assertIsTimestamped(category)
 
 
 class TestProductType:
