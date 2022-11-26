@@ -9,6 +9,7 @@ from ecommerce.products.models import (
     Product,
     ProductType,
     Size,
+    SubProduct,
 )
 
 
@@ -119,3 +120,16 @@ class TestProduct:
 
     def test_product_is_timestamped(self, product):
         assertIsTimestamped(product)
+
+
+class TestSubProduct:
+    def test_create_subProduct(self, product):
+        SubProduct.objects.create(
+            SKU="XYZ123456",
+            rr_price=99.90,
+            store_price=150.99,
+            sale_price=120.00,
+            product=product,
+        )
+        count = SubProduct.objects.all().count()
+        assert count == 1
