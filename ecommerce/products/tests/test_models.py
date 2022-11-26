@@ -94,3 +94,6 @@ class TestProductColour:
 
     def test_colour_fixture_is_valid(self, colour):
         assert isinstance(colour, Colour)
+
+    def test_colour_is_timestamped(self, colour):
+        assertIsTimestamped(colour)
