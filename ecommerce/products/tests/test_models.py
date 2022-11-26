@@ -133,3 +133,6 @@ class TestSubProduct:
         )
         count = SubProduct.objects.all().count()
         assert count == 1
+
+    def test_subProduct_fixture(self, subProduct):
+        assert isinstance(subProduct, SubProduct)
