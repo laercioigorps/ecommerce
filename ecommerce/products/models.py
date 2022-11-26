@@ -29,3 +29,9 @@ class Size(TimeStampedModel):
 class Colour(TimeStampedModel):
     name = models.CharField(max_length=30)
     description = models.TextField(default="")
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
