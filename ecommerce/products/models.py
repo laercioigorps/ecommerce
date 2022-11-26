@@ -31,7 +31,7 @@ class Colour(TimeStampedModel):
     description = models.TextField(default="")
 
 
-class Product(models.Model):
+class Product(TimeStampedModel):
     name = models.CharField(max_length=100)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
