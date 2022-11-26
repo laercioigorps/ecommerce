@@ -1,6 +1,13 @@
 import pytest
 
-from ecommerce.products.models import Brand, Category, Colour, ProductType, Size
+from ecommerce.products.models import (
+    Brand,
+    Category,
+    Colour,
+    Product,
+    ProductType,
+    Size,
+)
 from ecommerce.users.models import User
 from ecommerce.users.tests.factories import UserFactory
 
@@ -41,4 +48,11 @@ def size(db) -> Size:
 def productType(db) -> ProductType:
     return ProductType.objects.create(
         name="typeName", description="description of some type"
+    )
+
+
+@pytest.fixture
+def product(db, category) -> Product:
+    return Product.objects.create(
+        name="newProduct", description="someDescription", category=category
     )
