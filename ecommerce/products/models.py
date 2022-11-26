@@ -21,7 +21,7 @@ class ProductType(TimeStampedModel):
     description = models.TextField(default="")
 
 
-class Size(models.Model):
+class Size(TimeStampedModel):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
 
