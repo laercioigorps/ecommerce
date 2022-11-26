@@ -26,6 +26,6 @@ class Size(TimeStampedModel):
     description = models.TextField(default="")
 
 
-class Colour(models.Model):
+class Colour(TimeStampedModel):
     name = models.CharField(max_length=30)
     description = models.TextField(default="")
