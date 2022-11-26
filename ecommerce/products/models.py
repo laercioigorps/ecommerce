@@ -37,7 +37,7 @@ class Product(TimeStampedModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 
-class SubProduct(models.Model):
+class SubProduct(TimeStampedModel):
     SKU = models.CharField(max_length=40)
     rr_price = models.DecimalField(max_digits=6, decimal_places=2)
     sale_price = models.DecimalField(max_digits=6, decimal_places=2)
