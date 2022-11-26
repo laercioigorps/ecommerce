@@ -113,3 +113,6 @@ class TestProduct:
         )
         productCount = Product.objects.all().count()
         assert productCount == 1
+
+    def test_product_fixture(self, product):
+        assert isinstance(product, Product)
