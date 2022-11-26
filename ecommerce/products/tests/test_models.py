@@ -156,3 +156,7 @@ class TestSubProduct:
             )
         subProductsCount = SubProduct.objects.all().count()
         assert subProductsCount == 1
+
+    def test_subProduct_has_colour(self, subProduct):
+        assert isinstance(subProduct, SubProduct)
+        assert subProduct.colour in Colour.objects.all()
