@@ -35,3 +35,11 @@ class Product(TimeStampedModel):
     name = models.CharField(max_length=100)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+
+class SubProduct(models.Model):
+    SKU = models.CharField(max_length=40)
+    rr_price = models.DecimalField(max_digits=6, decimal_places=2)
+    sale_price = models.DecimalField(max_digits=6, decimal_places=2)
+    store_price = models.DecimalField(max_digits=6, decimal_places=2)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
