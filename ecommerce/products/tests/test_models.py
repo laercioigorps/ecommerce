@@ -1,6 +1,7 @@
 from datetime import date
 
 import pytest
+from django.db import IntegrityError
 
 from ecommerce.products.models import (
     Brand,
@@ -139,3 +140,19 @@ class TestSubProduct:
 
     def test_subProduct_is_timestamped(self, subProduct):
         assertIsTimestamped(subProduct)
+
+    @pytest.mark.django_db(transaction=True)
+    def test_subProduc_SKU_is_unique(self, subProduct):
+        subProductsCount = SubProduct.objects.all().count()
+        assert subProductsCount == 1
+
+        with pytest.raises(IntegrityError):
+            SubProduct.objects.create(
+                SKU=subProduct.SKU,
+                rr_price=99.90,
+                store_price=150.99,
+                sale_price=120.00,
+                product=subProduct.product,
+            )
+        subProductsCount = SubProduct.objects.all().count()
+        assert subProductsCount == 1
