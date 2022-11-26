@@ -7,6 +7,7 @@ from ecommerce.products.models import (
     Product,
     ProductType,
     Size,
+    SubProduct,
 )
 from ecommerce.users.models import User
 from ecommerce.users.tests.factories import UserFactory
@@ -55,4 +56,15 @@ def productType(db) -> ProductType:
 def product(db, category) -> Product:
     return Product.objects.create(
         name="newProduct", description="someDescription", category=category
+    )
+
+
+@pytest.fixture
+def subProduct(db, product) -> SubProduct:
+    return SubProduct.objects.create(
+        SKU="XYZ123456",
+        rr_price=99.90,
+        store_price=150.99,
+        sale_price=120.00,
+        product=product,
     )
