@@ -116,3 +116,6 @@ class TestProduct:
 
     def test_product_fixture(self, product):
         assert isinstance(product, Product)
+
+    def test_product_is_timestamped(self, product):
+        assertIsTimestamped(product)
