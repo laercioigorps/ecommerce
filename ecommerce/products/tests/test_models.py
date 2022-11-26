@@ -81,6 +81,9 @@ class TestProductSize:
         sizes_count = Size.objects.all().count()
         assert sizes_count == 1
 
+    def test_product_size_is_timestamped(self, size):
+        assertIsTimestamped(size)
+
 
 class TestProductColour:
     @pytest.mark.django_db
