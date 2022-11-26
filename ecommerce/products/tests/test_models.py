@@ -2,7 +2,14 @@ from datetime import date
 
 import pytest
 
-from ecommerce.products.models import Brand, Category, Colour, ProductType, Size
+from ecommerce.products.models import (
+    Brand,
+    Category,
+    Colour,
+    Product,
+    ProductType,
+    Size,
+)
 
 
 def assertIsTimestamped(model):
@@ -97,3 +104,12 @@ class TestProductColour:
 
     def test_colour_is_timestamped(self, colour):
         assertIsTimestamped(colour)
+
+
+class TestProduct:
+    def test_create_product(self, category):
+        Product.objects.create(
+            name="someProduct", description="SomeProduct Description", category=category
+        )
+        productCount = Product.objects.all().count()
+        assert productCount == 1
