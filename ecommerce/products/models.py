@@ -38,7 +38,7 @@ class Product(TimeStampedModel):
 
 
 class SubProduct(TimeStampedModel):
-    SKU = models.CharField(max_length=40)
+    SKU = models.CharField(max_length=40, unique=True)
     rr_price = models.DecimalField(max_digits=6, decimal_places=2)
     sale_price = models.DecimalField(max_digits=6, decimal_places=2)
     store_price = models.DecimalField(max_digits=6, decimal_places=2)
