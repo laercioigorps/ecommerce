@@ -60,7 +60,7 @@ def product(db, category) -> Product:
 
 
 @pytest.fixture
-def subProduct(db, product, colour) -> SubProduct:
+def subProduct(db, product, colour, size) -> SubProduct:
     return SubProduct.objects.create(
         SKU="XYZ123456",
         rr_price=99.90,
@@ -68,4 +68,5 @@ def subProduct(db, product, colour) -> SubProduct:
         sale_price=120.00,
         product=product,
         colour=colour,
+        size=size,
     )
