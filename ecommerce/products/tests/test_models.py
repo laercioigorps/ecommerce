@@ -160,3 +160,6 @@ class TestSubProduct:
     def test_subProduct_has_colour(self, subProduct):
         assert isinstance(subProduct, SubProduct)
         assert subProduct.colour in Colour.objects.all()
+
+    def test_subProduct_has_size(self, subProduct):
+        assert subProduct.size in Size.objects.all()
