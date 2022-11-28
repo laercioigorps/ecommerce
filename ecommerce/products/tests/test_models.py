@@ -181,3 +181,6 @@ class TestProductMedia:
 
         product_media_count = product.media_set.all().count()
         assert product_media_count == 1
+
+    def test_media_fixture(self, media):
+        assert isinstance(media, Media)
