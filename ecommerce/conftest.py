@@ -4,6 +4,7 @@ from ecommerce.products.models import (
     Brand,
     Category,
     Colour,
+    Media,
     Product,
     ProductType,
     Size,
@@ -69,4 +70,14 @@ def subProduct(db, product, colour, size) -> SubProduct:
         product=product,
         colour=colour,
         size=size,
+    )
+
+
+@pytest.fixture
+def media(db, product):
+    return Media.objects.create(
+        url="heeps://someurl.com/123",
+        description="some image description",
+        alt_text="what is happening in the image",
+        product=product,
     )
