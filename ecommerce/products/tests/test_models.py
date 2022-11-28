@@ -7,6 +7,7 @@ from ecommerce.products.models import (
     Brand,
     Category,
     Colour,
+    Media,
     Product,
     ProductType,
     Size,
@@ -163,3 +164,20 @@ class TestSubProduct:
 
     def test_subProduct_has_size(self, subProduct):
         assert subProduct.size in Size.objects.all()
+
+
+class TestProductMedia:
+    def test_create_media(self, product):
+        media_count = Media.objects.all().count()
+        assert media_count == 0
+        Media.objects.create(
+            url="heeps://someurl.com/123",
+            description="some image description",
+            alt_text="what is happening in the image",
+            product=product,
+        )
+        media_count = Media.objects.all().count()
+        assert media_count == 1
+
+        product_media_count = product.media_set.all().count()
+        assert product_media_count == 1
