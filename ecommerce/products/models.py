@@ -45,3 +45,10 @@ class SubProduct(TimeStampedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     colour = models.ForeignKey(Colour, on_delete=models.CASCADE, null=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, null=True)
+
+
+class Media(models.Model):
+    url = models.CharField(max_length=140)
+    description = models.TextField(default="")
+    alt_text = models.TextField(default="")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
