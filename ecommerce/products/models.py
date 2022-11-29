@@ -37,6 +37,7 @@ class Product(TimeStampedModel):
         ("G", "Girl"),
         ("B", "Boys"),
         ("W", "Women"),
+        ("M", "Men"),
     ]
 
     name = models.CharField(max_length=100)
