@@ -54,9 +54,9 @@ def productType(db) -> ProductType:
 
 
 @pytest.fixture
-def product(db, category) -> Product:
+def product(db, category, brand) -> Product:
     return Product.objects.create(
-        name="newProduct", description="someDescription", category=category
+        name="newProduct", description="someDescription", category=category, brand=brand
     )
 
 
