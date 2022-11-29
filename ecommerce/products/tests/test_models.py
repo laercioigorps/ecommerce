@@ -123,6 +123,9 @@ class TestProduct:
     def test_product_is_timestamped(self, product):
         assertIsTimestamped(product)
 
+    def test_product_brand(self, product):
+        assert isinstance(product.brand, Brand)
+
 
 class TestSubProduct:
     def test_create_subProduct(self, product):
