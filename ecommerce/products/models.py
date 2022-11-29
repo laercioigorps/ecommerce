@@ -35,6 +35,7 @@ class Product(TimeStampedModel):
 
     GENRE_CHOICES = [
         ("G", "Girl"),
+        ("B", "Boys"),
     ]
 
     name = models.CharField(max_length=100)
