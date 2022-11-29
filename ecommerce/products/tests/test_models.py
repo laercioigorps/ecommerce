@@ -126,6 +126,13 @@ class TestProduct:
     def test_product_brand(self, product):
         assert isinstance(product.brand, Brand)
 
+    @pytest.mark.django_db
+    def test_product_genre_girl(self, product):
+        product.genre = "G"
+        product.save()
+        copy = Product.objects.get(pk=product.id)
+        assert copy.get_genre_display() == "Girl"
+
 
 class TestSubProduct:
     def test_create_subProduct(self, product):
