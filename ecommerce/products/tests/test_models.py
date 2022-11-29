@@ -133,6 +133,13 @@ class TestProduct:
         copy = Product.objects.get(pk=product.id)
         assert copy.get_genre_display() == "Girl"
 
+    @pytest.mark.django_db
+    def test_product_genre_boys(self, product):
+        product.genre = "B"
+        product.save()
+        copy = Product.objects.get(pk=product.id)
+        assert copy.get_genre_display() == "Boys"
+
 
 class TestSubProduct:
     def test_create_subProduct(self, product):
