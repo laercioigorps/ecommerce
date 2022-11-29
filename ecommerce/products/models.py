@@ -32,10 +32,16 @@ class Colour(TimeStampedModel):
 
 
 class Product(TimeStampedModel):
+
+    GENRE_CHOICES = [
+        ("G", "Girl"),
+    ]
+
     name = models.CharField(max_length=100)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
+    genre = models.CharField(max_length=20, choices=GENRE_CHOICES, null=True)
 
 
 class SubProduct(TimeStampedModel):
