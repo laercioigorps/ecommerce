@@ -45,6 +45,7 @@ class Product(TimeStampedModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     genre = models.CharField(max_length=20, choices=GENRE_CHOICES, null=True)
+    usage = models.CharField(max_length=30)
 
 
 class SubProduct(TimeStampedModel):
