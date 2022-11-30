@@ -82,7 +82,7 @@ class SubProduct(TimeStampedModel):
 
 
 class Media(models.Model):
-    url = models.CharField(max_length=140)
+    url = models.CharField(max_length=200)
     description = models.TextField(default="")
     alt_text = models.TextField(default="")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
