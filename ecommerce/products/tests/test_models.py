@@ -38,6 +38,9 @@ class TestBrand:
         assert brand.created_at.date() == today
         assert brand.updated_at.date() == today
 
+    def test_brand_name_is_object_name(self, brand):
+        assert brand.name == str(brand)
+
 
 class TestCategory:
     @pytest.mark.django_db
@@ -66,6 +69,9 @@ class TestCategory:
     def test_category_is_timestamped(self, category):
         assertIsTimestamped(category)
 
+    def test_category_name_is_object_name(self, category):
+        assert category.name == str(category)
+
 
 class TestProductType:
     def test_Type_fixture_is_valid(self, productType):
@@ -79,6 +85,9 @@ class TestProductType:
 
     def test_productType_is_timestamped(self, productType):
         assertIsTimestamped(productType)
+
+    def test_productType_name_is_object_name(self, productType):
+        assert productType.name == str(productType)
 
 
 class TestProductSize:
@@ -94,6 +103,9 @@ class TestProductSize:
     def test_product_size_is_timestamped(self, size):
         assertIsTimestamped(size)
 
+    def test_size_name_is_object_name(self, size):
+        assert size.name == str(size)
+
 
 class TestProductColour:
     @pytest.mark.django_db
@@ -107,6 +119,9 @@ class TestProductColour:
 
     def test_colour_is_timestamped(self, colour):
         assertIsTimestamped(colour)
+
+    def test_colour_name_is_object_name(self, colour):
+        assert colour.name == str(colour)
 
 
 class TestProduct:
@@ -161,6 +176,9 @@ class TestProduct:
         copy = Product.objects.get(pk=product.id)
         assert copy.usage == "Casual"
 
+    def test_product_name_is_object_name(self, product):
+        assert product.name == str(product)
+
 
 class TestSubProduct:
     def test_create_subProduct(self, product):
@@ -202,6 +220,14 @@ class TestSubProduct:
 
     def test_subProduct_has_size(self, subProduct):
         assert subProduct.size in Size.objects.all()
+
+    def test_subproduct_name_is_product_name_color_and_size(self, subProduct):
+        pattert = "{} - {} - {}".format(
+            subProduct.product.name,
+            subProduct.colour.name,
+            subProduct.size.name,
+        )
+        assert pattert == str(subProduct)
 
 
 class TestProductMedia:
