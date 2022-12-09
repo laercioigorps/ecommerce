@@ -1,58 +1,66 @@
 from django.db import models
 from wagtail.snippets.models import register_snippet
 
-from ecommerce.models import TimeStampedModel
-
 # Create your models here.
 
 
 @register_snippet
-class Brand(TimeStampedModel):
+class Brand(models.Model):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.name
 
 
 @register_snippet
-class Category(TimeStampedModel):
+class Category(models.Model):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.name
 
 
-class ProductType(TimeStampedModel):
+class ProductType(models.Model):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.name
 
 
 @register_snippet
-class Size(TimeStampedModel):
+class Size(models.Model):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.name
 
 
 @register_snippet
-class Colour(TimeStampedModel):
+class Colour(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.name
 
 
 @register_snippet
-class Product(TimeStampedModel):
+class Product(models.Model):
 
     GENRE_CHOICES = [
         ("G", "Girl"),
@@ -67,12 +75,14 @@ class Product(TimeStampedModel):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True)
     genre = models.CharField(max_length=20, choices=GENRE_CHOICES, null=True)
     usage = models.CharField(max_length=30)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.name
 
 
-class SubProduct(TimeStampedModel):
+class SubProduct(models.Model):
     SKU = models.CharField(max_length=40, unique=True)
     rr_price = models.DecimalField(max_digits=6, decimal_places=2)
     sale_price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -80,6 +90,8 @@ class SubProduct(TimeStampedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     colour = models.ForeignKey(Colour, on_delete=models.CASCADE, null=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return "{} - {} - {}".format(
