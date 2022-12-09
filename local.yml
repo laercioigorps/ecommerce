@@ -14,6 +14,7 @@ services:
     platform: linux/x86_64
     depends_on:
       - postgres
+      - es
     volumes:
       - .:/app:z
     env_file:
@@ -34,6 +35,14 @@ services:
       - ecommerce_local_postgres_data_backups:/backups:z
     env_file:
       - ./.envs/.local/.postgres
+
+  es:
+    image: elasticsearch:7.8.1
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
 
   docs:
     image: ecommerce_local_docs

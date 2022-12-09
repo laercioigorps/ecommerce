@@ -320,3 +320,14 @@ SPECTACULAR_SETTINGS = {
 # ------------------------------------------------------------------------------
 
 WAGTAIL_SITE_NAME = "Souza"
+
+WAGTAILSEARCH_BACKENDS = {
+    "default": {
+        "BACKEND": "wagtail.search.backends.elasticsearch7",
+        "URLS": ["http://es:9200"],
+        "INDEX": "wagtail",
+        "TIMEOUT": 5,
+        "OPTIONS": {},
+        "INDEX_SETTINGS": {},
+    }
+}
