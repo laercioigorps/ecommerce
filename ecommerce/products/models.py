@@ -1,10 +1,12 @@
 from django.db import models
+from wagtail.snippets.models import register_snippet
 
 from ecommerce.models import TimeStampedModel
 
 # Create your models here.
 
 
+@register_snippet
 class Brand(TimeStampedModel):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
@@ -13,6 +15,7 @@ class Brand(TimeStampedModel):
         return self.name
 
 
+@register_snippet
 class Category(TimeStampedModel):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
@@ -30,6 +33,7 @@ class ProductType(TimeStampedModel):
         return self.name
 
 
+@register_snippet
 class Size(TimeStampedModel):
     name = models.CharField(max_length=60)
     description = models.TextField(default="")
@@ -38,6 +42,7 @@ class Size(TimeStampedModel):
         return self.name
 
 
+@register_snippet
 class Colour(TimeStampedModel):
     name = models.CharField(max_length=30)
     description = models.TextField(default="")
@@ -46,6 +51,7 @@ class Colour(TimeStampedModel):
         return self.name
 
 
+@register_snippet
 class Product(TimeStampedModel):
 
     GENRE_CHOICES = [
