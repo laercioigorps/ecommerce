@@ -96,6 +96,7 @@ class Product(ClusterableModel):
                 FieldPanel("usage"),
             ]
         ),
+        InlinePanel("product_medias", heading="Medias", label="Media"),
         InlinePanel("subproducts", heading="Sub Products", label="Sub Product"),
     ]
 
@@ -141,4 +142,6 @@ class Media(models.Model):
     url = models.CharField(max_length=200)
     description = models.TextField(default="")
     alt_text = models.TextField(default="")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = ParentalKey(
+        Product, on_delete=models.CASCADE, related_name="product_medias"
+    )
