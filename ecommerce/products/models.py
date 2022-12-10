@@ -2,6 +2,7 @@ from django.db import models
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel
+from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
 # Create your models here.
@@ -63,7 +64,7 @@ class Colour(models.Model):
 
 
 @register_snippet
-class Product(ClusterableModel):
+class Product(ClusterableModel, index.Indexed):
 
     GENRE_CHOICES = [
         ("G", "Girl"),
@@ -98,6 +99,10 @@ class Product(ClusterableModel):
         ),
         InlinePanel("product_medias", heading="Medias", label="Media"),
         InlinePanel("subproducts", heading="Sub Products", label="Sub Product"),
+    ]
+
+    search_fields = [
+        index.SearchField("name", partial_match=True),
     ]
 
     def __str__(self) -> str:
