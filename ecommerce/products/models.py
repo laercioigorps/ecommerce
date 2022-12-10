@@ -1,4 +1,7 @@
 from django.db import models
+from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel
 from wagtail.snippets.models import register_snippet
 
 # Create your models here.
@@ -60,7 +63,7 @@ class Colour(models.Model):
 
 
 @register_snippet
-class Product(models.Model):
+class Product(ClusterableModel):
 
     GENRE_CHOICES = [
         ("G", "Girl"),
@@ -78,6 +81,24 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("description"),
+        FieldRowPanel(
+            [
+                FieldPanel("category"),
+                FieldPanel("brand"),
+            ]
+        ),
+        FieldRowPanel(
+            [
+                FieldPanel("genre"),
+                FieldPanel("usage"),
+            ]
+        ),
+        InlinePanel("subproducts", heading="Sub Products", label="Sub Product"),
+    ]
+
     def __str__(self) -> str:
         return self.name
 
@@ -87,11 +108,28 @@ class SubProduct(models.Model):
     rr_price = models.DecimalField(max_digits=6, decimal_places=2)
     sale_price = models.DecimalField(max_digits=6, decimal_places=2)
     store_price = models.DecimalField(max_digits=6, decimal_places=2)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = ParentalKey(Product, on_delete=models.CASCADE, related_name="subproducts")
     colour = models.ForeignKey(Colour, on_delete=models.CASCADE, null=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    panels = [
+        FieldPanel("SKU"),
+        FieldRowPanel(
+            [
+                FieldPanel("rr_price"),
+                FieldPanel("sale_price"),
+                FieldPanel("store_price"),
+            ]
+        ),
+        FieldRowPanel(
+            [
+                FieldPanel("colour"),
+                FieldPanel("size"),
+            ]
+        ),
+    ]
 
     def __str__(self) -> str:
         return "{} - {} - {}".format(
