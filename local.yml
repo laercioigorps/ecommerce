@@ -17,6 +17,7 @@ services:
       - es
     volumes:
       - .:/app:z
+    restart: always
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
