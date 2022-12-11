@@ -118,6 +118,13 @@ class Product(ClusterableModel, index.Indexed):
             return None
         return price_range
 
+    def get_colours(self):
+        dif_colours = Colour.objects.filter(subproduct__product__pk=self.pk)
+        report = []
+        for colour in dif_colours:
+            report.append({"colour": colour})
+        return report
+
 
 class ProductFilterSet(WagtailFilterSet):
     class Meta:
