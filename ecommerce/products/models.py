@@ -119,7 +119,7 @@ class Product(ClusterableModel, index.Indexed):
         return price_range
 
     def get_colours(self):
-        dif_colours = Colour.objects.filter(subproduct__product__pk=self.pk)
+        dif_colours = Colour.objects.filter(subproduct__product__pk=self.pk).distinct()
         subproducts = self.subproducts.all()
         report = []
         for colour in dif_colours:
