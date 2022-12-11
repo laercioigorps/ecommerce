@@ -1,6 +1,7 @@
 from django.db import models
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
+from wagtail.admin.filters import WagtailFilterSet
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
@@ -63,7 +64,6 @@ class Colour(models.Model):
         return self.name
 
 
-@register_snippet
 class Product(ClusterableModel, index.Indexed):
 
     GENRE_CHOICES = [
@@ -107,6 +107,17 @@ class Product(ClusterableModel, index.Indexed):
 
     def __str__(self) -> str:
         return self.name
+
+
+class ProductFilterSet(WagtailFilterSet):
+    class Meta:
+        model = Product
+        fields = {
+            "category__name": ["icontains"],
+            "brand__name": ["icontains"],
+            "genre": ["icontains"],
+            "usage": ["icontains"],
+        }
 
 
 class SubProduct(models.Model):
