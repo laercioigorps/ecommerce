@@ -20,3 +20,9 @@ class ProductDetail(Page):
     content_panels = Page.content_panels + [
         FieldPanel("product"),
     ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        price_range = self.product.get_price_range()
+        context["price_range"] = price_range
+        return context
