@@ -229,6 +229,31 @@ class TestProduct:
         assert len(colours[1]["subproducts"]) == 1
         assert colours[1]["subproducts"][0].SKU == product2.SKU
 
+    @pytest.mark.django_db
+    def test_product_all_colors_report_with_same_colour(self, product, colour, size):
+        SubProduct.objects.create(
+            SKU="qwe",
+            rr_price=20,
+            store_price=25,
+            sale_price=22,
+            product=product,
+            colour=colour,
+            size=size,
+        )
+        SubProduct.objects.create(
+            SKU="ewq",
+            rr_price=19,
+            store_price=24,
+            sale_price=20,
+            product=product,
+            colour=colour,
+            size=size,
+        )
+        colours = product.get_colours()
+        assert len(colours) == 1
+        assert colours[0]["colour"].name == colour.name
+        assert len(colours[0]["subproducts"]) == 2
+
 
 class TestSubProduct:
     def test_create_subProduct(self, product):
