@@ -199,7 +199,7 @@ class TestProduct:
 
     @pytest.mark.django_db
     def test_product_all_colors_report(self, product, colour, size):
-        product1 = SubProduct.objects.create(
+        SubProduct.objects.create(
             SKU="qwe",
             rr_price=20,
             store_price=25,
@@ -209,7 +209,7 @@ class TestProduct:
             size=size,
         )
         colour2 = Colour.objects.create(name="new")
-        product2 = SubProduct.objects.create(
+        SubProduct.objects.create(
             SKU="ewq",
             rr_price=19,
             store_price=24,
@@ -220,14 +220,8 @@ class TestProduct:
         )
         colours = product.get_colours()
         assert len(colours) == 2
-        assert colours[0]["colour"].name == colour.name
-        assert colours[1]["colour"].name == colour2.name
-
-        assert len(colours[0]["subproducts"]) == 1
-        assert colours[0]["subproducts"][0].SKU == product1.SKU
-
-        assert len(colours[1]["subproducts"]) == 1
-        assert colours[1]["subproducts"][0].SKU == product2.SKU
+        assert colours[0].name == colour.name
+        assert colours[1].name == colour2.name
 
     @pytest.mark.django_db
     def test_product_all_colors_report_with_same_colour(self, product, colour, size):
@@ -251,8 +245,7 @@ class TestProduct:
         )
         colours = product.get_colours()
         assert len(colours) == 1
-        assert colours[0]["colour"].name == colour.name
-        assert len(colours[0]["subproducts"]) == 2
+        assert colours[0].name == colour.name
 
 
 class TestSubProduct:
