@@ -120,9 +120,15 @@ class Product(ClusterableModel, index.Indexed):
 
     def get_colours(self):
         dif_colours = Colour.objects.filter(subproduct__product__pk=self.pk)
+        subproducts = self.subproducts.all()
         report = []
         for colour in dif_colours:
-            report.append({"colour": colour})
+            sub = subproducts.filter(colour=colour)
+            r = {
+                "colour": colour,
+                "subproducts": list(sub),
+            }
+            report.append(r)
         return report
 
 
