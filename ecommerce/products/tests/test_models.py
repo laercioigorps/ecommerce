@@ -197,6 +197,32 @@ class TestProduct:
         assert price_range["sale_price__min"] == 20
         assert price_range["sale_price__max"] == 22
 
+    @pytest.mark.django_db
+    def test_product_all_colors(self, product, colour, size):
+        SubProduct.objects.create(
+            SKU="qwe",
+            rr_price=20,
+            store_price=25,
+            sale_price=22,
+            product=product,
+            colour=colour,
+            size=size,
+        )
+        colour2 = Colour.objects.create(name="new")
+        SubProduct.objects.create(
+            SKU="ewq",
+            rr_price=19,
+            store_price=24,
+            sale_price=20,
+            product=product,
+            colour=colour2,
+            size=size,
+        )
+        colours = product.get_colours()
+        assert len(colours) == 2
+        assert colours[0]["colour"].name == colour.name
+        assert colours[1]["colour"].name == colour2.name
+
 
 class TestSubProduct:
     def test_create_subProduct(self, product):
