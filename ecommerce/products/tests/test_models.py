@@ -243,7 +243,7 @@ class TestProductMedia:
         media_count = Media.objects.all().count()
         assert media_count == 1
 
-        product_media_count = product.media_set.all().count()
+        product_media_count = product.product_medias.all().count()
         assert product_media_count == 1
 
     def test_media_fixture(self, media):
