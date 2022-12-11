@@ -179,6 +179,24 @@ class TestProduct:
     def test_product_name_is_object_name(self, product):
         assert product.name == str(product)
 
+    @pytest.mark.django_db
+    def test_product_price_range_none_without_subproducts(self, product):
+        assert product.get_price_range() is None
+
+    @pytest.mark.django_db
+    def test_product_price_range_min_and_max(self, product):
+        SubProduct.objects.create(
+            SKU="qwe", rr_price=20, store_price=25, sale_price=22, product=product
+        )
+        SubProduct.objects.create(
+            SKU="ewq", rr_price=19, store_price=24, sale_price=20, product=product
+        )
+        price_range = product.get_price_range()
+        assert price_range["store_price__min"] == 24
+        assert price_range["store_price__max"] == 25
+        assert price_range["sale_price__min"] == 20
+        assert price_range["sale_price__max"] == 22
+
 
 class TestSubProduct:
     def test_create_subProduct(self, product):
