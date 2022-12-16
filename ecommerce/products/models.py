@@ -113,7 +113,6 @@ class Product(ClusterableModel, index.Indexed):
         price_range = self.subproducts.all().aggregate(
             Max("sale_price"), Min("sale_price"), Max("store_price"), Min("store_price")
         )
-        print(price_range)
         if price_range["sale_price__min"] is None:
             return None
         return price_range
