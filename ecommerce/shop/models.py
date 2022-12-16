@@ -24,5 +24,7 @@ class ProductDetail(Page):
     def get_context(self, request):
         context = super().get_context(request)
         price_range = self.product.get_price_range()
+        colour_report = self.product.get_colours()
         context["price_range"] = price_range
+        context["colours"] = colour_report
         return context
