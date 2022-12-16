@@ -10,6 +10,7 @@ def test_product_with_subproducts_fixture(product_with_many_sub_products):
 
 
 def test_product_detail_page_colours_context(product_with_many_sub_products, rf):
+    """Tests product get_context has all subproducts colours"""
     product = product_with_many_sub_products
     detail_page = ProductDetail(product=product)
     request = rf.get("/random-page")
@@ -22,6 +23,7 @@ def test_product_detail_page_colours_context(product_with_many_sub_products, rf)
 
 
 def test_product_detail_contains_price_range(product_with_many_sub_products, rf):
+    """Tests product get_context has subproducts min and max price(store_price and sale_price)"""
     product = product_with_many_sub_products
     detail_page = ProductDetail(product=product)
     request = rf.get("/random-page")
