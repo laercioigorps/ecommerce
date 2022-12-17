@@ -85,9 +85,9 @@ def media(db, product):
 
 @pytest.fixture
 def product_with_many_sub_products(db, product):
-    colour1 = Colour.objects.create(name="colour 1", description="")
-    colour2 = Colour.objects.create(name="colour 2", description="")
-    colour3 = Colour.objects.create(name="colour 3", description="")
+    colour1 = Colour.objects.create(name="colour-1", description="")
+    colour2 = Colour.objects.create(name="colour-2", description="")
+    colour3 = Colour.objects.create(name="colour-3", description="")
 
     size1 = Size.objects.create(name="MD")
     size2 = Size.objects.create(name="LG")
