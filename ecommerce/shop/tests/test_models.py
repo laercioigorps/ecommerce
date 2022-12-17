@@ -88,3 +88,15 @@ def test_product_detail_page_context_with_subproducts_filtered_by_colour_name_ig
     assert len(page_context["subproducts"]) == 1
     assert page_context["subproducts"][0].colour.name == "colour-1"
     assert page_context["subproducts"][0].SKU == "XYZ123456"
+
+
+def test_product_detail_page_context_with_subproduct_when_SKU(
+    product_with_many_sub_products, rf
+):
+    product = product_with_many_sub_products
+    detail_page = ProductDetail(product=product)
+    request = rf.get("/random-page?colour=Colour-1&sku=XYZ123456")
+    page_context = detail_page.get_context(request=request)
+
+    assert "subproduct" in page_context
+    assert page_context["subproduct"].SKU == "XYZ123456"
