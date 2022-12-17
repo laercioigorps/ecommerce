@@ -28,7 +28,7 @@ class ProductDetail(Page):
         colour = request.GET.get("colour")
         if colour:
             context["subproducts"] = self.product.subproducts.filter(
-                colour__name=colour
+                colour__name__iexact=colour
             )
         context["price_range"] = price_range
         context["colours"] = colour_report
