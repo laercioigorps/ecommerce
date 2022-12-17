@@ -22,6 +22,17 @@ def test_product_detail_page_colours_context(product_with_many_sub_products, rf)
     assert subproducts[2].colour in page_context["colours"]
 
 
+def test_product_detail_page_context_has_active_colour(
+    product_with_many_sub_products, rf
+):
+    """Tests product get_context has all subproducts colours"""
+    product = product_with_many_sub_products
+    detail_page = ProductDetail(product=product)
+    request = rf.get("/random-page?colour=colour-1")
+    page_context = detail_page.get_context(request=request)
+    assert page_context["colour"] == "colour-1"
+
+
 def test_product_detail_contains_price_range(product_with_many_sub_products, rf):
     """Tests product get_context has subproducts min and max price(store_price and sale_price)"""
     product = product_with_many_sub_products
@@ -34,6 +45,22 @@ def test_product_detail_contains_price_range(product_with_many_sub_products, rf)
 
     assert str(page_context["price_range"]["sale_price__min"]) == "120.00"
     assert str(page_context["price_range"]["sale_price__max"]) == "132.00"
+
+
+def test_product_detail_contains_price_range_for_colour(
+    product_with_many_sub_products, rf
+):
+    """Tests product get_context has subproducts min and max price(store_price and sale_price)"""
+    product = product_with_many_sub_products
+    detail_page = ProductDetail(product=product)
+    request = rf.get("/random-page?colour=colour-1")
+    page_context = detail_page.get_context(request=request)
+
+    assert str(page_context["price_range"]["store_price__min"]) == "150.99"
+    assert str(page_context["price_range"]["store_price__max"]) == "150.99"
+
+    assert str(page_context["price_range"]["sale_price__min"]) == "120.00"
+    assert str(page_context["price_range"]["sale_price__max"]) == "120.00"
 
 
 def test_product_detail_page_context_with_subproducts_filtered_by_colour(
