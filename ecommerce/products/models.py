@@ -109,8 +109,11 @@ class Product(ClusterableModel, index.Indexed):
     def __str__(self) -> str:
         return self.name
 
-    def get_price_range(self):
-        price_range = self.subproducts.all().aggregate(
+    def get_price_range(self, colour_name=None):
+        subproducts = self.subproducts.all()
+        if colour_name:
+            subproducts = subproducts.filter(colour__name__iexact=colour_name)
+        price_range = subproducts.aggregate(
             Max("sale_price"), Min("sale_price"), Max("store_price"), Min("store_price")
         )
         if price_range["sale_price__min"] is None:
