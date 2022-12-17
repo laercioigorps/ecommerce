@@ -43,7 +43,19 @@ def test_product_detail_page_context_with_subproducts_filtered_by_colour(
     sub_product = product.subproducts.first()
     detail_page = ProductDetail(product=product)
     request = rf.get(f"/random-page?colour={sub_product.colour.name}")
-    print(f"/random-page?colour={sub_product.colour.name}")
+    page_context = detail_page.get_context(request=request)
+
+    assert len(page_context["subproducts"]) == 1
+    assert page_context["subproducts"][0].colour.name == "colour 1"
+    assert page_context["subproducts"][0].SKU == "XYZ123456"
+
+
+def test_product_detail_page_context_with_subproducts_filtered_by_colour_name_ignoring_case(
+    product_with_many_sub_products, rf
+):
+    product = product_with_many_sub_products
+    detail_page = ProductDetail(product=product)
+    request = rf.get("/random-page?colour=Colour 1")
     page_context = detail_page.get_context(request=request)
 
     assert len(page_context["subproducts"]) == 1
