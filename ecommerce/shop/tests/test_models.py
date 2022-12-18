@@ -1,5 +1,8 @@
 # import pytest
+import pytest
+
 from ecommerce.products.models import SubProduct
+from ecommerce.shop.models import ShoppingCart
 
 from ..models import ProductDetail
 
@@ -100,3 +103,21 @@ def test_product_detail_page_context_with_subproduct_when_SKU(
 
     assert "subproduct" in page_context
     assert page_context["subproduct"].SKU == "XYZ123456"
+
+
+@pytest.mark.django_db
+def test_add_items_to_shopping_cart(user, product_with_many_sub_products):
+    product = product_with_many_sub_products
+    subproduct1 = product.subproducts.all()[0]
+    subproduct2 = product.subproducts.all()[1]
+
+    shopping_cart = ShoppingCart.objects.create(owner=user)
+    shopping_cart.items.add(subproduct1, through_defaults={"quantity": 2})
+    shopping_cart_item = subproduct1.shoppingcartitem_set.get(cart=shopping_cart)
+    assert shopping_cart.items.count() == 1
+    assert shopping_cart_item.quantity == 2
+
+    shopping_cart.items.add(subproduct2, through_defaults={"quantity": 5})
+    shopping_cart_item = subproduct2.shoppingcartitem_set.get(cart=shopping_cart)
+    assert shopping_cart.items.count() == 2
+    assert shopping_cart_item.quantity == 5
