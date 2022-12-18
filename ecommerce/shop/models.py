@@ -2,7 +2,8 @@ from django.db import models
 from wagtail.admin.panels import FieldPanel
 from wagtail.models import Page
 
-from ecommerce.products.models import Product
+from ecommerce.products.models import Product, SubProduct
+from ecommerce.users.models import User
 
 
 # Create your models here.
@@ -35,3 +36,14 @@ class ProductDetail(Page):
         context["price_range"] = self.product.get_price_range(colour)
         context["colours"] = self.product.get_colours()
         return context
+
+
+class ShoppingCart(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(SubProduct, through="ShoppingCartItem")
+
+
+class ShoppingCartItem(models.Model):
+    cart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE)
+    item = models.ForeignKey(SubProduct, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
