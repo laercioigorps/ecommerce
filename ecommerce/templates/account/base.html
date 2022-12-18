@@ -1,9 +1,10 @@
-{% extends "base.html" %}
+{% extends "shopbase.html" %}
 {% block title %}{% block head_title %}{% endblock head_title %}{% endblock title %}
-
+{%block menu%}
+{%endblock%}
 {% block content %}
 <div class="row">
-  <div class="col-md-6 offset-md-3">
+  <div class="col-md-6 offset-md-3 mt-5 mb-5">
     {% block inner %}{% endblock %}
   </div>
 </div>
