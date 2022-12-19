@@ -10,6 +10,14 @@ from ecommerce.products.models import (
     Size,
     SubProduct,
 )
+from ecommerce.products.tests.factories import (
+    BrandFactory,
+    CategoryFactory,
+    ColourFactory,
+    ProductFactory,
+    SizeFactory,
+    SubProductFactory,
+)
 from ecommerce.users.models import User
 from ecommerce.users.tests.factories import UserFactory
 
@@ -26,24 +34,22 @@ def user(db) -> User:
 
 @pytest.fixture
 def category(db) -> Category:
-    return Category.objects.create(name="someName", description="some description")
+    return CategoryFactory()
 
 
 @pytest.fixture
 def brand(db) -> Brand:
-    return Brand.objects.create(name="someBrand", description="some description")
+    return BrandFactory()
 
 
 @pytest.fixture
 def colour(db) -> Colour:
-    return Colour.objects.create(
-        name="someColour", description="some colour description"
-    )
+    return ColourFactory()
 
 
 @pytest.fixture
 def size(db) -> Size:
-    return Size.objects.create(name="sizeName", description="size description")
+    return SizeFactory()
 
 
 @pytest.fixture
@@ -55,22 +61,12 @@ def productType(db) -> ProductType:
 
 @pytest.fixture
 def product(db, category, brand) -> Product:
-    return Product.objects.create(
-        name="newProduct", description="someDescription", category=category, brand=brand
-    )
+    return ProductFactory(category=category, brand=brand)
 
 
 @pytest.fixture
 def subProduct(db, product, colour, size) -> SubProduct:
-    return SubProduct.objects.create(
-        SKU="XYZ123456",
-        rr_price=99.90,
-        store_price=150.99,
-        sale_price=120.00,
-        product=product,
-        colour=colour,
-        size=size,
-    )
+    return SubProductFactory(product=product, colour=colour, size=size)
 
 
 @pytest.fixture
