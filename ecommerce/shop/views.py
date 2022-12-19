@@ -5,7 +5,7 @@ from django.views import View
 
 from ecommerce.products.models import SubProduct
 
-from .models import ShoppingCart
+from .services import ShoppingCartServices
 
 # Create your views here.
 
@@ -16,11 +16,7 @@ class ShoppingCartView(View):
         quantity = request.POST.get("quantity")
 
         subproduct = get_object_or_404(SubProduct, pk=item)
-        carts = ShoppingCart.objects.filter(owner=request.user).filter(is_active=True)
-        if not carts:
-            shoppingcart = ShoppingCart.objects.create(owner=request.user)
-        else:
-            shoppingcart = carts.first()
+        shoppingcart = ShoppingCartServices.get_active_or_create(request.user)
         # checks if the item already exists in the cart
         is_cart_item = shoppingcart.items.all().filter(pk=subproduct.id).exists()
         if not is_cart_item:
