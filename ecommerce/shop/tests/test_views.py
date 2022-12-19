@@ -52,3 +52,25 @@ def test_add_two_items_to_same_shopping_cart(user, rf):
     assert shopping_cart_items.count() == 2
     assert shopping_cart_items[0].id == item1.id
     assert shopping_cart_items[1].id == item2.id
+
+
+def test_add_same_item_twice_to_shopping_cart(user, rf, subProduct):
+    view = ShoppingCartView.as_view()
+
+    # add first item
+    request = rf.post("/random/", {"item": subProduct.id, "quantity": 2})
+    request.user = user
+    response = view(request)
+    # add second item
+    request = rf.post("/random/", {"item": subProduct.id, "quantity": 3})
+    request.user = user
+    response = view(request)
+
+    shopping_cart = ShoppingCart.objects.first()
+    shopping_cart_items = shopping_cart.items.all()
+    shopping_cart_item = shopping_cart.shoppingcartitem_set.first()
+
+    assert response.status_code == 200
+    assert shopping_cart_items.count() == 1
+    assert shopping_cart_item.item == subProduct
+    assert shopping_cart_item.quantity == 5
