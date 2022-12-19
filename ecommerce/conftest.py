@@ -18,6 +18,7 @@ from ecommerce.products.tests.factories import (
     SizeFactory,
     SubProductFactory,
 )
+from ecommerce.shop.models import ShoppingCart
 from ecommerce.users.models import User
 from ecommerce.users.tests.factories import UserFactory
 
@@ -126,3 +127,8 @@ def product_with_many_sub_products(db, product):
     SubProduct.objects.bulk_create(subProducts)
 
     return product
+
+
+@pytest.fixture
+def shoppingcart(db, user):
+    return ShoppingCart.objects.create(owner=user)
