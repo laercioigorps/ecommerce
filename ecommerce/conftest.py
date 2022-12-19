@@ -61,12 +61,12 @@ def productType(db) -> ProductType:
 
 @pytest.fixture
 def product(db, category, brand) -> Product:
-    return ProductFactory(category=category, brand=brand)
+    return ProductFactory()
 
 
 @pytest.fixture
-def subProduct(db, product, colour, size) -> SubProduct:
-    return SubProductFactory(product=product, colour=colour, size=size)
+def subProduct(db) -> SubProduct:
+    return SubProductFactory()
 
 
 @pytest.fixture
