@@ -1,4 +1,4 @@
-from factory import Faker
+from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
 
 from ..models import Brand, Category, Colour, Product, Size, SubProduct
@@ -39,6 +39,8 @@ class ColourFactory(DjangoModelFactory):
 class ProductFactory(DjangoModelFactory):
     name = Faker("name")
     description = "somedescription"
+    category = SubFactory(CategoryFactory)
+    brand = SubFactory(BrandFactory)
     genre = "W"
     usage = "Casual"
 
@@ -53,6 +55,9 @@ class SubProductFactory(DjangoModelFactory):
     )
     sale_price = 110
     store_price = 150
+    product = SubFactory(ProductFactory)
+    colour = SubFactory(ColourFactory)
+    size = SubFactory(SizeFactory)
 
     class Meta:
         model = SubProduct
