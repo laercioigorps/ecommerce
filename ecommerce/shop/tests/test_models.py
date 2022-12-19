@@ -121,3 +121,7 @@ def test_add_items_to_shopping_cart(user, product_with_many_sub_products):
     shopping_cart_item = subproduct2.shoppingcartitem_set.get(cart=shopping_cart)
     assert shopping_cart.items.count() == 2
     assert shopping_cart_item.quantity == 5
+
+
+def test_shopping_cart_has_active_atribute_default_to_true(shoppingcart):
+    assert shoppingcart.is_active
