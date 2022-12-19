@@ -41,6 +41,7 @@ class ProductDetail(Page):
 class ShoppingCart(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(SubProduct, through="ShoppingCartItem")
+    is_active = models.BooleanField(default=True)
 
 
 class ShoppingCartItem(models.Model):
