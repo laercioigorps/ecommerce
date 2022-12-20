@@ -38,6 +38,10 @@ class ProductDetail(Page):
         return context
 
 
+class ShoppingCartPage(Page):
+    pass
+
+
 class ShoppingCart(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(SubProduct, through="ShoppingCartItem")
