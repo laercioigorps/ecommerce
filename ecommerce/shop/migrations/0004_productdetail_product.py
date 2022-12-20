@@ -7,15 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0030_alter_media_product'),
-        ('shop', '0003_productdetail'),
+        ("products", "0030_alter_media_product"),
+        ("shop", "0003_productdetail"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='productdetail',
-            name='product',
-            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='products.product'),
+            model_name="productdetail",
+            name="product",
+            field=models.ForeignKey(
+                default=None,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="products.product",
+            ),
             preserve_default=False,
         ),
     ]
