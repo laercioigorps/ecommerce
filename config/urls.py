@@ -21,6 +21,7 @@ urlpatterns = [
     path("users/", include("ecommerce.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    path("shop/", include("ecommerce.shop.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URLS
