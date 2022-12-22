@@ -5,6 +5,8 @@ argon2-cffi==21.3.0  # https://github.com/hynek/argon2_cffi
 whitenoise==6.2.0  # https://github.com/evansd/whitenoise
 redis==4.3.4  # https://github.com/redis/redis-py
 hiredis==2.0.0  # https://github.com/redis/hiredis-py
+wagtail==4.1.1
+elasticsearch==7.17.7
 
 # Django
 # ------------------------------------------------------------------------------
@@ -20,6 +22,4 @@ djangorestframework==3.14.0  # https://github.com/encode/django-rest-framework
 django-cors-headers==3.13.0 # https://github.com/adamchainz/django-cors-headers
 # DRF-spectacular for api documentation
 drf-spectacular==0.24.2  # https://github.com/tfranzel/drf-spectacular
-
-wagtail==4.1.1
-elasticsearch==7.17.7
+django-mathfilters==1.0.0

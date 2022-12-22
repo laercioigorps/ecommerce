@@ -88,6 +88,7 @@ THIRD_PARTY_APPS = [
     "wagtail",
     "modelcluster",
     "taggit",
+    "mathfilters",
 ]
 
 LOCAL_APPS = [
