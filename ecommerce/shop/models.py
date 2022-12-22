@@ -39,7 +39,13 @@ class ProductDetail(Page):
 
 
 class ShoppingCartPage(Page):
-    pass
+    def get_context(self, request, *args, **kwargs):
+        from .services import ShoppingCartServices
+
+        context = super().get_context(request, *args, **kwargs)
+        cart = ShoppingCartServices.get_active_or_create(request.user)
+        context["items"] = cart.shoppingcartitem_set.all()
+        return context
 
 
 class ShoppingCart(models.Model):
