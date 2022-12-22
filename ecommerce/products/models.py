@@ -124,6 +124,9 @@ class Product(ClusterableModel, index.Indexed):
         dif_colours = Colour.objects.filter(subproduct__product__pk=self.pk).distinct()
         return dif_colours
 
+    def get_main_image(self):
+        return self.product_medias.all().first()
+
 
 class ProductFilterSet(WagtailFilterSet):
     class Meta:
