@@ -79,14 +79,17 @@
 
                     </div>
                     <p>{{page.product.description}}</p>
+                    <!-- Form beggin -->
+                    <form id="myform" method="POST" action="{% url "shop:add_to_cart" %}">
+                        {% csrf_token %}
                     <div class="product__details__button">
                         <div class="quantity">
                             <span>Quantity:</span>
                             <div class="pro-qty">
-                                <input type="text" value="1">
+                                <input id="quantity" type="text" name="quantity" value="1">
                             </div>
                         </div>
-                        <a href="#" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+                        <a href="#" onclick="document.getElementById('myform').submit()" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
                         <ul>
                             <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                             <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
@@ -104,6 +107,7 @@
                                     </label>
                                 </div>
                             </li>
+
                             <li>
                                 <span>Available color:</span>
                                 {% for col in colours%}
@@ -115,54 +119,32 @@
                                         {% endwith %}
                                     {% endif %}
                                 {% endfor %}
-
-                             {% comment %} <div class="color__checkbox">
-                                    <label for="red">
-                                        <input type="radio" name="color__radio" id="red" checked>
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <label for="black">
-                                        <input type="radio" name="color__radio" id="black">
-                                        <span class="checkmark black-bg"></span>
-                                    </label>
-                                    <label for="grey">
-                                        <input type="radio" name="color__radio" id="grey">
-                                        <span class="checkmark grey-bg"></span>
-                                    </label>
-                                </div> {% endcomment %}
-
                             </li>
                             <li>
                                 <span>Available size:</span>
                                 <div class="size__btn">
                                     {% for subp in subproducts %}
                                         {% with page.url|add:"?colour="|add:subp.colour.name|add:"&sku="|add:subp.SKU as subp_url%}
-
-                                        <label for="xs-btn" class="active">
-                                            <input type="radio" id="xs-btn">
+                                        {%if subproduct and subp.id == subproduct.id%}
+                                        <label for="{{subp.id}}" class="">
+                                            <input name="item" type="radio" id="{{subp.id}}" value="{{subp.id}}">
+                                            <a href="{{subp_url}}" class="text-primary">{{subp.size.name}}</a>
+                                        </label>
+                                        <input type="hidden" id="custId" name="item" value="{{subp.id}}">
+                                        {% else %}
+                                        <label for="{{subp.id}}" class="">
+                                            <input name="item" type="radio" id="{{subp.id}}" value="{{subp.id}}">
                                             <a href="{{subp_url}}" class="text-secondary">{{subp.size.name}}</a>
                                         </label>
+                                        {% endif %}
+
 
                                         {% endwith %}
                                     {% endfor %}
-                                    {% comment %} <label for="xs-btn" class="active">
-                                        <input type="radio" id="xs-btn">
-                                        xs
-                                    </label>
-                                    <label for="s-btn">
-                                        <input type="radio" id="s-btn">
-                                        s
-                                    </label>
-                                    <label for="m-btn">
-                                        <input type="radio" id="m-btn">
-                                        m
-                                    </label>
-                                    <label for="l-btn">
-                                        <input type="radio" id="l-btn">
-                                        l
-                                    </label> {% endcomment %}
+
                                 </div>
                             </li>
+                        </form>
                             <li>
                                 <span>Promotions:</span>
                                 <p>Free shipping</p>
