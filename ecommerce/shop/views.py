@@ -10,7 +10,7 @@ from .services import ShoppingCartServices
 # Create your views here.
 
 
-class ShoppingCartView(View):
+class ShoppingCartAddItemView(View):
     def post(self, request):
         item = request.POST.get("item")
         quantity = request.POST.get("quantity")

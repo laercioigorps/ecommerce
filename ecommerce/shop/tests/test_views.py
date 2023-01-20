@@ -2,14 +2,14 @@ import pytest
 
 from ecommerce.products.tests.factories import SubProductFactory
 from ecommerce.shop.models import ShoppingCart
-from ecommerce.shop.views import ShoppingCartView
+from ecommerce.shop.views import ShoppingCartAddItemView
 
 
 def test_add_invalid_item_to_shopping_cart_view(user, rf):
     request = rf.post("/random/", {"item": 999, "quantity": 2})
     request.user = user
 
-    view = ShoppingCartView.as_view()
+    view = ShoppingCartAddItemView.as_view()
     with pytest.raises(Exception):
         view(request)
 
@@ -17,7 +17,7 @@ def test_add_invalid_item_to_shopping_cart_view(user, rf):
 def test_add_item_to_shopping_cart_with_valid_user_view(user, rf, subProduct):
     request = rf.post("/random/", {"item": subProduct.id, "quantity": 2})
     request.user = user
-    view = ShoppingCartView.as_view()
+    view = ShoppingCartAddItemView.as_view()
     response = view(request)
     cart_item_count = subProduct.shoppingcartitem_set.count()
     cart_item = subProduct.shoppingcartitem_set.first()
@@ -32,7 +32,7 @@ def test_add_two_items_to_same_shopping_cart(user, rf):
     item1 = SubProductFactory()
     item2 = SubProductFactory()
 
-    view = ShoppingCartView.as_view()
+    view = ShoppingCartAddItemView.as_view()
 
     # add first item
     request = rf.post("/random/", {"item": item1.id, "quantity": 2})
@@ -55,7 +55,7 @@ def test_add_two_items_to_same_shopping_cart(user, rf):
 
 
 def test_add_same_item_twice_to_shopping_cart(user, rf, subProduct):
-    view = ShoppingCartView.as_view()
+    view = ShoppingCartAddItemView.as_view()
 
     # add first item
     request = rf.post("/random/", {"item": subProduct.id, "quantity": 2})
