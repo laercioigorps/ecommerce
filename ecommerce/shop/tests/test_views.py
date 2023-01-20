@@ -2,7 +2,7 @@ import pytest
 
 from ecommerce.products.tests.factories import SubProductFactory
 from ecommerce.shop.models import ShoppingCart
-from ecommerce.shop.views import ShoppingCartAddItemView
+from ecommerce.shop.views import ShoppingCartAddItemView, ShoppingCartRemoveItemView
 
 
 def test_add_invalid_item_to_shopping_cart_view(user, rf):
@@ -74,3 +74,36 @@ def test_add_same_item_twice_to_shopping_cart(user, rf, subProduct):
     assert shopping_cart_items.count() == 1
     assert shopping_cart_item.item == subProduct
     assert shopping_cart_item.quantity == 5
+
+
+def test_delete_shopping_cart_item(user, rf, subProduct):
+    view = ShoppingCartAddItemView.as_view()
+    # add first item
+    request = rf.post("/random/", {"item": subProduct.id, "quantity": 2})
+    request.user = user
+    response = view(request)
+    # add second item
+    view = ShoppingCartRemoveItemView.as_view()
+    request = rf.delete("/random/")
+    request.user = user
+    response = view(request, subProduct.id)
+
+    shopping_cart = ShoppingCart.objects.first()
+    shopping_cart_items = shopping_cart.items.all()
+
+    assert response.status_code == 200
+    assert shopping_cart_items.count() == 0
+
+
+def test_delete_invelid_shopping_cart_item(user, rf, subProduct):
+    # add second item
+    view = ShoppingCartRemoveItemView.as_view()
+    request = rf.delete("/random/")
+    request.user = user
+    response = view(request, subProduct.id)
+
+    shopping_cart = ShoppingCart.objects.first()
+    shopping_cart_items = shopping_cart.items.all()
+
+    assert response.status_code == 404
+    assert shopping_cart_items.count() == 0
