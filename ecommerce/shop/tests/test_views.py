@@ -84,7 +84,7 @@ def test_delete_shopping_cart_item(user, rf, subProduct):
     response = view(request)
     # add second item
     view = ShoppingCartRemoveItemView.as_view()
-    request = rf.delete("/random/")
+    request = rf.post("/random/")
     request.user = user
     response = view(request, subProduct.id)
 
@@ -98,7 +98,7 @@ def test_delete_shopping_cart_item(user, rf, subProduct):
 def test_delete_invelid_shopping_cart_item(user, rf, subProduct):
     # add second item
     view = ShoppingCartRemoveItemView.as_view()
-    request = rf.delete("/random/")
+    request = rf.post("/random/")
     request.user = user
     response = view(request, subProduct.id)
 

@@ -23,7 +23,7 @@ class ShoppingCartAddItemView(View):
 
 
 class ShoppingCartRemoveItemView(View):
-    def delete(self, request, item):
+    def post(self, request, item):
         subproduct = get_object_or_404(SubProduct, pk=item)
         shoppingcart = ShoppingCartServices.get_active_or_create(request.user)
         is_cart_item = shoppingcart.items.all().filter(pk=subproduct.id).exists()
