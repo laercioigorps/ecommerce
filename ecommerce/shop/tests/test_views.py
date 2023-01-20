@@ -1,8 +1,26 @@
 import pytest
+from django.urls import reverse
+from pytest_django.asserts import assertTemplateUsed
 
 from ecommerce.products.tests.factories import SubProductFactory
 from ecommerce.shop.models import ShoppingCart
 from ecommerce.shop.views import ShoppingCartAddItemView, ShoppingCartRemoveItemView
+
+from ..services import ShoppingCartServices
+
+
+@pytest.mark.django_db
+def test_shopping_cart_page_with_logged_user(user, client, subProduct):
+    cart = ShoppingCartServices.get_active_or_create(user)
+    ShoppingCartServices.add_or_update_cart_item(cart=cart, item=subProduct, quantity=3)
+
+    client.force_login(user)
+    response = client.get(reverse("shop:cart_page"))
+    assert response.status_code == 200
+    assertTemplateUsed(response, "shop/shopping_cart_page.html")
+    assert len(response.context["items"]) == 1
+    assert response.context["items"][0].item.id == subProduct.id
+    assert response.context["items"][0].quantity == 3
 
 
 def test_add_invalid_item_to_shopping_cart_view(user, rf):

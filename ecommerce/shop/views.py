@@ -1,6 +1,5 @@
-# from django.shortcuts import render
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views import View
 
 from ecommerce.products.models import SubProduct
@@ -8,6 +7,13 @@ from ecommerce.products.models import SubProduct
 from .services import ShoppingCartServices
 
 # Create your views here.
+
+
+class CartPageView(View):
+    def get(self, request):
+        cart = ShoppingCartServices.get_active_or_create(request.user)
+        items = cart.shoppingcartitem_set.all()
+        return render(request, "shop/shopping_cart_page.html", {"items": items})
 
 
 class ShoppingCartAddItemView(View):
