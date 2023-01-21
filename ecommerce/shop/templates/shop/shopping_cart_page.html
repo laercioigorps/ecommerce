@@ -42,7 +42,10 @@
                                     </div>
                                 </td>
                                 <td class="cart__total">$ {{item.quantity|mul:item.item.sale_price}}</td>
-                                <td class="cart__close"><a href="#"><span class="icon_close"></a></span></td>
+                                <form id="myform{{item.item.id}}" method="POST" action="{% url 'shop:remove_from_cart' item.item.id %}">
+                                    {% csrf_token %}
+                                    <td class="cart__close"><a href="#" onclick="document.getElementById('myform{{item.item.id}}').submit()"><span class="icon_close"></a></span></td>
+                                </form>
                             </tr>
                             {% endfor %}
                         </tbody>
