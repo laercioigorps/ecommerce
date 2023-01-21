@@ -117,8 +117,24 @@ def test_delete_shopping_cart_item(user, rf, subProduct):
     shopping_cart = ShoppingCart.objects.first()
     shopping_cart_items = shopping_cart.items.all()
 
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert shopping_cart_items.count() == 0
+
+
+def test_delete_item_from_shopping_cart_with_valid_user_view_redirects_to_cart_page(
+    user, client, subProduct
+):
+    client.force_login(user)
+    # add item
+    response = client.post(
+        reverse("shop:add_to_cart"), {"item": subProduct.id, "quantity": 2}
+    )
+    # remove item
+
+    response = client.post(
+        reverse("shop:remove_from_cart", kwargs={"item": subProduct.id}),
+    )
+    assertRedirects(response, reverse("shop:cart_page"))
 
 
 def test_delete_invelid_shopping_cart_item(user, rf, subProduct):

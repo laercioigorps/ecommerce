@@ -37,5 +37,5 @@ class ShoppingCartRemoveItemView(View):
         if is_cart_item:
             # add item
             shoppingcart.items.remove(subproduct)
-            return HttpResponse(status=200)
+            return HttpResponseRedirect(reverse("shop:cart_page"))
         return HttpResponse(status=404)
