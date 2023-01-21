@@ -1,5 +1,6 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.views import View
 
 from ecommerce.products.models import SubProduct
@@ -25,7 +26,7 @@ class ShoppingCartAddItemView(View):
         shoppingcart = ShoppingCartServices.get_active_or_create(request.user)
         # checks if the item already exists in the cart
         ShoppingCartServices.add_or_update_cart_item(shoppingcart, subproduct, quantity)
-        return HttpResponse(status=200)
+        return HttpResponseRedirect(reverse("shop:cart_page"))
 
 
 class ShoppingCartRemoveItemView(View):

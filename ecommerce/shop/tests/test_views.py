@@ -1,6 +1,6 @@
 import pytest
 from django.urls import reverse
-from pytest_django.asserts import assertTemplateUsed
+from pytest_django.asserts import assertRedirects, assertTemplateUsed
 
 from ecommerce.products.tests.factories import SubProductFactory
 from ecommerce.shop.models import ShoppingCart
@@ -40,10 +40,20 @@ def test_add_item_to_shopping_cart_with_valid_user_view(user, rf, subProduct):
     cart_item_count = subProduct.shoppingcartitem_set.count()
     cart_item = subProduct.shoppingcartitem_set.first()
 
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert cart_item_count == 1
     assert cart_item.quantity == 2
     assert cart_item.cart.owner == user
+
+
+def test_add_item_to_shopping_cart_with_valid_user_view_redirects_to_cart_page(
+    user, client, subProduct
+):
+    client.force_login(user)
+    response = client.post(
+        reverse("shop:add_to_cart"), {"item": subProduct.id, "quantity": 2}
+    )
+    assertRedirects(response, reverse("shop:cart_page"))
 
 
 def test_add_two_items_to_same_shopping_cart(user, rf):
@@ -55,17 +65,16 @@ def test_add_two_items_to_same_shopping_cart(user, rf):
     # add first item
     request = rf.post("/random/", {"item": item1.id, "quantity": 2})
     request.user = user
-    response = view(request)
+    view(request)
     # add second item
     request = rf.post("/random/", {"item": item2.id, "quantity": 3})
     request.user = user
-    response = view(request)
+    view(request)
 
     shopping_cart_count = ShoppingCart.objects.all().count()
     shopping_cart = ShoppingCart.objects.first()
     shopping_cart_items = shopping_cart.items.all()
 
-    assert response.status_code == 200
     assert shopping_cart_count == 1
     assert shopping_cart_items.count() == 2
     assert shopping_cart_items[0].id == item1.id
@@ -78,17 +87,16 @@ def test_add_same_item_twice_to_shopping_cart(user, rf, subProduct):
     # add first item
     request = rf.post("/random/", {"item": subProduct.id, "quantity": 2})
     request.user = user
-    response = view(request)
+    view(request)
     # add second item
     request = rf.post("/random/", {"item": subProduct.id, "quantity": 3})
     request.user = user
-    response = view(request)
+    view(request)
 
     shopping_cart = ShoppingCart.objects.first()
     shopping_cart_items = shopping_cart.items.all()
     shopping_cart_item = shopping_cart.shoppingcartitem_set.first()
 
-    assert response.status_code == 200
     assert shopping_cart_items.count() == 1
     assert shopping_cart_item.item == subProduct
     assert shopping_cart_item.quantity == 5
