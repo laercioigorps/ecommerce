@@ -38,16 +38,6 @@ class ProductDetail(Page):
         return context
 
 
-class ShoppingCartPage(Page):
-    def get_context(self, request, *args, **kwargs):
-        from .services import ShoppingCartServices
-
-        context = super().get_context(request, *args, **kwargs)
-        cart = ShoppingCartServices.get_active_or_create(request.user)
-        context["items"] = cart.shoppingcartitem_set.all()
-        return context
-
-
 class ShoppingCart(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(SubProduct, through="ShoppingCartItem")
