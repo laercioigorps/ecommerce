@@ -123,3 +123,19 @@ def test_delete_invalid_shopping_cart_item(user, client, subProduct):
         reverse("shop:remove_from_cart", kwargs={"item": 99}),
     )
     assert response.status_code == 404
+
+
+@pytest.mark.django_db
+def test_view_add_item_to_shopping_cart_with_anonymous_user(client, subProduct):
+    response = client.post(
+        reverse("shop:add_to_cart"), {"item": subProduct.id, "quantity": 2}
+    )
+    assert response.status_code == 302
+    assert client.session["cart"][str(subProduct.id)]["quantity"] == "2"
+
+    # add the same item again
+    response = client.post(
+        reverse("shop:add_to_cart"), {"item": subProduct.id, "quantity": 1}
+    )
+    assert response.status_code == 302
+    assert client.session["cart"][str(subProduct.id)]["quantity"] == "3"
