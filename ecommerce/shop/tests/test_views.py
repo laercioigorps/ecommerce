@@ -139,3 +139,14 @@ def test_view_add_item_to_shopping_cart_with_anonymous_user(client, subProduct):
     )
     assert response.status_code == 302
     assert client.session["cart"][str(subProduct.id)]["quantity"] == "3"
+
+
+@pytest.mark.django_db
+def test_view_remove_item_to_shopping_cart_with_anonymous_user(client, subProduct):
+    # add the same item again
+    response = client.post(
+        reverse("shop:add_to_cart"), {"item": subProduct.id, "quantity": 1}
+    )
+    response = client.post(reverse("shop:remove_from_cart", args=[subProduct.id]))
+    assert response.status_code == 302
+    assert str(subProduct.id) not in client.session["cart"]

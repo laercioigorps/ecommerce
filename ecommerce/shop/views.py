@@ -44,10 +44,15 @@ class ShoppingCartAddItemView(View):
 class ShoppingCartRemoveItemView(View):
     def post(self, request, item):
         subproduct = get_object_or_404(SubProduct, pk=item)
-        shoppingcart = ShoppingCartServices.get_active_or_create(request.user)
-        is_cart_item = shoppingcart.items.all().filter(pk=subproduct.id).exists()
-        if is_cart_item:
-            # add item
-            shoppingcart.items.remove(subproduct)
+        if (
+            "cart" not in request.session
+            or str(subproduct.id) not in request.session["cart"]
+        ):
+            return HttpResponse(status=404)
+        else:
+            if request.user.is_authenticated:
+                shoppingcart = ShoppingCartServices.get_active_or_create(request.user)
+                shoppingcart.items.remove(subproduct)
+            del request.session["cart"][str(subproduct.id)]
+            request.session.modified = True
             return HttpResponseRedirect(reverse("shop:cart_page"))
-        return HttpResponse(status=404)
