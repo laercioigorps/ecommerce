@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField
+from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -12,7 +12,7 @@ class User(AbstractUser):
     """
 
     #: First and last name do not cover name patterns around the globe
-    name = CharField(_("Name of User"), blank=True, max_length=255)
+    name = models.CharField(_("Name of User"), blank=True, max_length=255)
     first_name = None  # type: ignore
     last_name = None  # type: ignore
 
@@ -24,3 +24,16 @@ class User(AbstractUser):
 
         """
         return reverse("users:detail", kwargs={"username": self.username})
+
+
+class Address(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    line_1 = models.CharField(max_length=100)
+    line_2 = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    postal_code = models.CharField(max_length=50)
+    country_code = models.CharField(max_length=50)
+
+    def __str__(self) -> str:
+        return f"{self.line_1}, {self.line_2} | {self.city}, {self.state}, {self.postal_code} - {self.country_code}"
