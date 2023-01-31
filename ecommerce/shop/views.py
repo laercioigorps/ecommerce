@@ -24,7 +24,22 @@ class CartPageView(View):
                 )
         else:
             items = None
-        return render(request, "shop/shopping_cart_page.html", {"items": items})
+
+        shipping = 5
+        subtotal = 0
+        for item in items:
+            subtotal += item["item"].sale_price * int(item["quantity"])
+        total = subtotal + shipping
+        return render(
+            request,
+            "shop/shopping_cart_page.html",
+            {
+                "items": items,
+                "shipping": shipping,
+                "subtotal": subtotal,
+                "total": total,
+            },
+        )
 
 
 class ShoppingCartAddItemView(View):

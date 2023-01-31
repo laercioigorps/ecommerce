@@ -40,6 +40,27 @@ def test_shopping_cart_page_with_anonymous_user(client, subProduct):
 
 
 @pytest.mark.django_db
+def test_shopping_cart_page_sub_total_and_total_with_shipping(client):
+
+    item1 = SubProductFactory(sale_price=10)
+    item2 = SubProductFactory(sale_price=5)
+
+    session = client.session
+    session["cart"] = {
+        str(item1.id): {"quantity": "3"},
+        str(item2.id): {"quantity": "5"},
+    }
+    session.save()
+
+    response = client.get(reverse("shop:cart_page"))
+    assert response.status_code == 200
+    assert len(response.context["items"]) == 2
+    assert response.context["subtotal"] == 55
+    assert response.context["shipping"] == 5
+    assert response.context["total"] == 60
+
+
+@pytest.mark.django_db
 def test_add_invalid_item_to_shopping_cart_view(client):
     response = client.post(reverse("shop:add_to_cart"), {"item": 999, "quantity": 2})
     assert response.status_code == 404
