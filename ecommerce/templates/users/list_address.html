@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block title %}User: {{ object.username }}{% endblock %}
-
+{% block breadcrumb_links %}
+    <a href="/"><i class="fa fa-home"></i> Home</a>
+    <a href="{% url 'users:detail' request.user.username%}"><i class="fa fa-home"></i> Accounts</a>
+    <span>List Address</span>
+{% endblock %}
 {% block inner %}
 <section class="contact spad">
   <div class="container">
