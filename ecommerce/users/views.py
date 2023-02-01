@@ -80,9 +80,7 @@ class EditAddressView(LoginRequiredMixin, View):
     def get(self, request, address_id):
         address = Address.objects.get(pk=address_id)
         form = AddressForm(instance=address)
-        return render(
-            request, "users/address_form.html", {"form": form, "address": address}
-        )
+        return render(request, "users/address_form.html", {"form": form})
 
     def post(self, request, address_id):
         address = Address.objects.get(pk=address_id)

@@ -12,7 +12,7 @@
         <form
             method="POST"
             class="mx-auto"
-            {% if form.instance %}
+            {% if form.instance.id %}
                 action="{% url 'users:edit_address' form.instance.id%}"
             {% else %}
                 action="{% url 'users:list_create_address' %}"
