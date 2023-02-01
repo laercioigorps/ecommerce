@@ -67,3 +67,9 @@ class ListCreateView(LoginRequiredMixin, View):
         return render(
             request, "users/list_address.html", context={"addresses": addresses}
         )
+
+
+class CreateAddressView(View):
+    def get(self, request):
+        form = AddressForm()
+        return render(request, "users/address_form.html", {"form": form})

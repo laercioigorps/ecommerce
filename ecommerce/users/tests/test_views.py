@@ -14,6 +14,8 @@ from ecommerce.users.models import Address, User
 from ecommerce.users.tests.factories import UserFactory
 from ecommerce.users.views import UserRedirectView, UserUpdateView, user_detail_view
 
+from ..forms import AddressForm
+
 pytestmark = pytest.mark.django_db
 
 
@@ -167,3 +169,10 @@ def test_add_address_for_valid_user(client, user):
     assertRedirects(response, reverse("users:list_create_address"))
     assert addresses.count() == 1
     assert addresses.first().owner == user
+
+
+def test_get_add_address_page_with_anonymous_user(client):
+    response = client.get(reverse("users:create_address"))
+    assert response.status_code == 200
+    assertTemplateUsed(response, "users/address_form.html")
+    assert isinstance(response.context["form"], AddressForm)
