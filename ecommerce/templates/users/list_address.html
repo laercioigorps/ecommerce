@@ -1,0 +1,27 @@
+{% extends "account/base.html" %}
+{% load static %}
+
+{% block title %}User: {{ object.username }}{% endblock %}
+
+{% block inner %}
+<section class="contact spad">
+  <div class="container">
+    <h2>Addresses</h2>
+    <div class="row">
+        {% for address in addresses %}
+        <div class="col-sm-6 mt-4">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">#</h5>
+              <p class="card-text">{{address}}</p>
+              <a href="#" class="btn btn-primary">Edit</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+  </div>
+</div>
+</section>
+<!-- Contact Section End -->
+{% endblock inner %}

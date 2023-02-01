@@ -7,9 +7,10 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from django.http import HttpRequest, HttpResponseRedirect
 from django.test import RequestFactory
 from django.urls import reverse
+from pytest_django.asserts import assertRedirects, assertTemplateUsed
 
 from ecommerce.users.forms import UserAdminChangeForm
-from ecommerce.users.models import User
+from ecommerce.users.models import Address, User
 from ecommerce.users.tests.factories import UserFactory
 from ecommerce.users.views import UserRedirectView, UserUpdateView, user_detail_view
 
@@ -97,3 +98,72 @@ class TestUserDetailView:
         assert isinstance(response, HttpResponseRedirect)
         assert response.status_code == 302
         assert response.url == f"{login_url}?next=/fake-url/"
+
+
+def test_list_address_for_anonymous_user(client, user):
+    response = client.get(reverse("users:list_create_address"))
+    assert response.status_code == 302
+
+
+def test_list_address_for_valid_user(client, user):
+    client.force_login(user)
+    user.address_set.create(
+        line_1="line 1 address 1",
+        line_2="line 2 address 1",
+        city="city 1",
+        state="state 1",
+        postal_code="postal_code 1",
+        country_code="country_code 1",
+    )
+
+    user.address_set.create(
+        line_1="line 1 address 2",
+        line_2="line 2 address 2",
+        city="city 2",
+        state="state 2",
+        postal_code="postal_code 2",
+        country_code="country_code 2",
+    )
+
+    response = client.get(reverse("users:list_create_address"))
+
+    assert response.status_code == 200
+    assertTemplateUsed(response, "users/list_address.html")
+    assert len(response.context["addresses"]) == 2
+    assert response.context["addresses"][0].line_1 == "line 1 address 1"
+    assert response.context["addresses"][1].line_1 == "line 1 address 2"
+
+
+def test_add_address_for_anonymour_user(client):
+    response = client.post(
+        reverse("users:list_create_address"),
+        data={
+            "line_1": "address line 1",
+            "line_2": "address line 1",
+            "city": "city",
+            "state": "state",
+            "postal_code": "postal_code",
+            "country_code": "US",
+        },
+    )
+    assert response.status_code == 302
+    assert Address.objects.count() == 0
+
+
+def test_add_address_for_valid_user(client, user):
+    client.force_login(user)
+    response = client.post(
+        reverse("users:list_create_address"),
+        data={
+            "line_1": "address line 1",
+            "line_2": "address line 1",
+            "city": "city",
+            "state": "state",
+            "postal_code": "postal_code",
+            "country_code": "US",
+        },
+    )
+    addresses = Address.objects.all()
+    assertRedirects(response, reverse("users:list_create_address"))
+    assert addresses.count() == 1
+    assert addresses.first().owner == user

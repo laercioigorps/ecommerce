@@ -1,9 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.views import View
 from django.views.generic import DetailView, RedirectView, UpdateView
+
+from .forms import AddressForm
 
 User = get_user_model()
 
@@ -46,3 +51,19 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
 
 user_redirect_view = UserRedirectView.as_view()
+
+
+class ListCreateView(LoginRequiredMixin, View):
+    def post(self, request):
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.owner = request.user
+            address.save()
+            return HttpResponseRedirect(reverse("users:list_create_address"))
+
+    def get(self, request):
+        addresses = request.user.address_set.all()
+        return render(
+            request, "users/list_address.html", context={"addresses": addresses}
+        )
