@@ -9,7 +9,15 @@
   <div class="container text-center">
     <h2>Add Address</h2>
     <div class="row mt-4">
-        <form method="POST" class="mx-auto" action="{% url 'users:list_create_address' %}">
+        <form
+            method="POST"
+            class="mx-auto"
+            {% if form.instance %}
+                action="{% url 'users:edit_address' form.instance.id%}"
+            {% else %}
+                action="{% url 'users:list_create_address' %}"
+            {%endif%}
+        >
             {% csrf_token %}
             {{form|crispy}}
             <input class="btn-success" type="submit" value="Add"/>

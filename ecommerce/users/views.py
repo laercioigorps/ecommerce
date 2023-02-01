@@ -9,6 +9,7 @@ from django.views import View
 from django.views.generic import DetailView, RedirectView, UpdateView
 
 from .forms import AddressForm
+from .models import Address
 
 User = get_user_model()
 
@@ -73,3 +74,19 @@ class CreateAddressView(View):
     def get(self, request):
         form = AddressForm()
         return render(request, "users/address_form.html", {"form": form})
+
+
+class EditAddressView(LoginRequiredMixin, View):
+    def get(self, request, address_id):
+        address = Address.objects.get(pk=address_id)
+        form = AddressForm(instance=address)
+        return render(
+            request, "users/address_form.html", {"form": form, "address": address}
+        )
+
+    def post(self, request, address_id):
+        address = Address.objects.get(pk=address_id)
+        form = AddressForm(instance=address, data=request.POST)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse("users:list_create_address"))

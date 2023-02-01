@@ -171,8 +171,63 @@ def test_add_address_for_valid_user(client, user):
     assert addresses.first().owner == user
 
 
-def test_get_add_address_page_with_anonymous_user(client):
-    response = client.get(reverse("users:create_address"))
+def test_access_edit_address_page_with_anonymous_user(client, user):
+    address = user.address_set.create(
+        line_1="line 1 address 2",
+        line_2="line 2 address 2",
+        city="city 2",
+        state="state 2",
+        postal_code="postal_code 2",
+        country_code="country_code 2",
+    )
+    response = client.get(
+        reverse("users:edit_address", kwargs={"address_id": address.id})
+    )
+    assert response.status_code == 302
+
+
+def test_access_edit_address_page_with_valid_user(client, user):
+    client.force_login(user)
+    address = user.address_set.create(
+        line_1="line 1 address 2",
+        line_2="line 2 address 2",
+        city="city 2",
+        state="state 2",
+        postal_code="postal_code 2",
+        country_code="country_code 2",
+    )
+    response = client.get(
+        reverse("users:edit_address", kwargs={"address_id": address.id})
+    )
     assert response.status_code == 200
     assertTemplateUsed(response, "users/address_form.html")
     assert isinstance(response.context["form"], AddressForm)
+    print(response.context["form"].instance)
+    assert response.context["form"].instance.line_1 == "line 1 address 2"
+
+
+def test_edit_address_with_valid_user(client, user):
+    client.force_login(user)
+    address = user.address_set.create(
+        line_1="line 1 address",
+        line_2="line 2 address",
+        city="city",
+        state="state",
+        postal_code="postal_code",
+        country_code="country_code",
+    )
+    response = client.post(
+        reverse("users:edit_address", kwargs={"address_id": address.id}),
+        data={
+            "line_1": "line 1 address edited",
+            "line_2": "line 2 address edited",
+            "city": "city",
+            "state": "state",
+            "postal_code": "postal_code",
+            "country_code": "country_code",
+        },
+    )
+    assert response.status_code == 302
+    assertRedirects(response, reverse("users:list_create_address"))
+    assert Address.objects.count() == 1
+    assert Address.objects.first().line_1 == "line 1 address edited"
