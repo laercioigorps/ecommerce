@@ -12,7 +12,7 @@
         <div class="col-sm-6 mt-4">
           <div class="card text-center">
             <div class="card-body">
-              <h5 class="card-title">#</h5>
+              <h5 class="card-title">#{{ forloop.counter }}</h5>
               <p class="card-text">{{address}}</p>
               <a href="{% url 'users:edit_address' address.id %}" class="btn btn-primary">Edit</a>
             </div>
