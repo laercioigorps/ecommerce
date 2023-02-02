@@ -4,6 +4,7 @@ from pytest_django.asserts import assertRedirects, assertTemplateUsed
 
 from ecommerce.products.tests.factories import SubProductFactory
 from ecommerce.shop.models import ShoppingCart
+from ecommerce.users.models import Address
 
 
 @pytest.mark.django_db
@@ -223,3 +224,44 @@ def test_select_cart_shipping_address_valid_user(client, user, subProduct):
     assert len(response.context["addresses"]) == 2
     assert response.context["addresses"][0].line_1 == "line 1 address 1"
     assert response.context["addresses"][1].line_1 == "line 1 address 2"
+
+
+@pytest.mark.django_db
+def test_get_checkout_page_with_invalid_address_redirects_to_select_address(
+    client, user, subProduct
+):
+    client.force_login(user)
+    response = client.post(
+        reverse("shop:add_to_cart"), {"item": subProduct.id, "quantity": 2}
+    )
+    response = client.get(reverse("shop:checkout", kwargs={"address": 999}))
+    assertRedirects(response, reverse("shop:select_address"))
+
+
+@pytest.mark.django_db
+def test_get_checkout_page_with_anonymous_user(client):
+    response = client.get(reverse("shop:checkout", kwargs={"address": 1}))
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_get_checkout_page(client, user, subProduct):
+    client.force_login(user)
+    address = user.address_set.create(
+        line_1="line 1 address 1",
+        line_2="line 2 address 1",
+        city="city 1",
+        state="state 1",
+        postal_code="postal_code 1",
+        country_code="country_code 1",
+    )
+    response = client.post(
+        reverse("shop:add_to_cart"), {"item": subProduct.id, "quantity": 2}
+    )
+    response = client.get(reverse("shop:checkout", kwargs={"address": address.id}))
+    assert response.status_code == 200
+    assert isinstance(response.context["address"], Address)
+    assertTemplateUsed(response, "shop/checkout.html")
+    assert response.context["items"][0]["item"] == subProduct
+    assert response.context["shipping"] == 5
+    assert response.context["total"] == 225

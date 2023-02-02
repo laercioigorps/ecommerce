@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     CartPageView,
+    CheckoutView,
     SelectAddressView,
     ShoppingCartAddItemView,
     ShoppingCartRemoveItemView,
@@ -25,5 +26,10 @@ urlpatterns = [
         "cart/select-address/",
         view=SelectAddressView.as_view(),
         name="select_address",
+    ),
+    path(
+        "address/<int:address>/checkout/",
+        view=CheckoutView.as_view(),
+        name="checkout",
     ),
 ]

@@ -5,10 +5,37 @@ from django.urls import reverse
 from django.views import View
 
 from ecommerce.products.models import SubProduct
+from ecommerce.users.models import Address
 
 from .services import ShoppingCartServices
 
 # Create your views here.
+
+
+def get_cart_summary(request):
+    if "cart" in request.session:
+        items_in = SubProduct.objects.in_bulk(request.session["cart"])
+        items = []
+        for item in items_in:
+            items.append(
+                {
+                    "item": items_in[item],
+                    "quantity": int(request.session["cart"][str(item)]["quantity"]),
+                }
+            )
+    else:
+        items = None
+    shipping = 5
+    subtotal = 0
+    for item in items:
+        subtotal += item["item"].sale_price * int(item["quantity"])
+    total = subtotal + shipping
+    return {
+        "items": items,
+        "shipping": shipping,
+        "subtotal": subtotal,
+        "total": total,
+    }
 
 
 class CartPageView(View):
@@ -88,3 +115,15 @@ class SelectAddressView(LoginRequiredMixin, View):
     def get(self, request):
         addresses = request.user.address_set.all()
         return render(request, "shop/select_address.html", {"addresses": addresses})
+
+
+class CheckoutView(LoginRequiredMixin, View):
+    def get(self, request, address):
+        try:
+            address = request.user.address_set.get(pk=address)
+        except Address.DoesNotExist:
+            return HttpResponseRedirect(reverse("shop:select_address"))
+
+        details = get_cart_summary(request)
+        details["address"] = address
+        return render(request, "shop/checkout.html", context=details)
