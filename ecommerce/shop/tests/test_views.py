@@ -188,3 +188,38 @@ def test_view_remove_item_to_shopping_cart_with_anonymous_user(client, subProduc
     response = client.post(reverse("shop:remove_from_cart", args=[subProduct.id]))
     assert response.status_code == 302
     assert str(subProduct.id) not in client.session["cart"]
+
+
+@pytest.mark.django_db
+def test_select_cart_shipping_address_login_required(client, subProduct):
+    # add the same item again
+    response = client.get(reverse("shop:select_address"))
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_select_cart_shipping_address_valid_user(client, user, subProduct):
+    client.force_login(user)
+    user.address_set.create(
+        line_1="line 1 address 1",
+        line_2="line 2 address 1",
+        city="city 1",
+        state="state 1",
+        postal_code="postal_code 1",
+        country_code="country_code 1",
+    )
+    user.address_set.create(
+        line_1="line 1 address 2",
+        line_2="line 2 address 2",
+        city="city 2",
+        state="state 2",
+        postal_code="postal_code 2",
+        country_code="country_code 2",
+    )
+    # add the same item again
+    response = client.get(reverse("shop:select_address"))
+    assert response.status_code == 200
+    assertTemplateUsed(response, "shop/select_address.html")
+    assert len(response.context["addresses"]) == 2
+    assert response.context["addresses"][0].line_1 == "line 1 address 1"
+    assert response.context["addresses"][1].line_1 == "line 1 address 2"

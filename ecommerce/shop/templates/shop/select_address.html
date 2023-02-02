@@ -1,0 +1,31 @@
+
+
+
+{% extends "shopbase.html" %}
+{% load static %}
+{% load mathfilters %}
+
+{% block content %}
+<section class="shop-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <h2>select address</h2>
+                <div class="mt-4">
+                {% for address in addresses %}
+                    <div class="form-check">
+                    <input class="form-check-input" type="radio" name="address" id="address">
+                    <label class="form-check-label" for="address">
+                        {{address}} (<a href="#">edit</a>)
+                    </label>
+                  </div>
+
+                {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock%}

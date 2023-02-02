@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -81,3 +82,9 @@ class ShoppingCartRemoveItemView(View):
             del request.session["cart"][str(subproduct.id)]
             request.session.modified = True
             return HttpResponseRedirect(reverse("shop:cart_page"))
+
+
+class SelectAddressView(LoginRequiredMixin, View):
+    def get(self, request):
+        addresses = request.user.address_set.all()
+        return render(request, "shop/select_address.html", {"addresses": addresses})
