@@ -192,14 +192,14 @@ def test_view_remove_item_to_shopping_cart_with_anonymous_user(client, subProduc
 
 
 @pytest.mark.django_db
-def test_select_cart_shipping_address_login_required(client, subProduct):
+def test_get_page_select_cart_shipping_address_login_required(client, subProduct):
     # add the same item again
     response = client.get(reverse("shop:select_address"))
     assert response.status_code == 302
 
 
 @pytest.mark.django_db
-def test_select_cart_shipping_address_valid_user(client, user, subProduct):
+def test_get_page_select_cart_shipping_address_valid_user(client, user, subProduct):
     client.force_login(user)
     user.address_set.create(
         line_1="line 1 address 1",
@@ -224,6 +224,24 @@ def test_select_cart_shipping_address_valid_user(client, user, subProduct):
     assert len(response.context["addresses"]) == 2
     assert response.context["addresses"][0].line_1 == "line 1 address 1"
     assert response.context["addresses"][1].line_1 == "line 1 address 2"
+
+
+@pytest.mark.django_db
+def test_get_page_select_cart_shipping_address_with_address_parameter_redirects(
+    client, user, subProduct
+):
+    client.force_login(user)
+    address = user.address_set.create(
+        line_1="line 1 address 1",
+        line_2="line 2 address 1",
+        city="city 1",
+        state="state 1",
+        postal_code="postal_code 1",
+        country_code="country_code 1",
+    )
+    # add the same item again
+    response = client.get(f"{reverse('shop:select_address')}?address={address.id}")
+    assertRedirects(response, reverse("shop:checkout", kwargs={"address": address.id}))
 
 
 @pytest.mark.django_db

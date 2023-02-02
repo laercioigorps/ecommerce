@@ -13,15 +13,18 @@
 
                 <h2>select address</h2>
                 <div class="mt-4">
+                    <form>
                 {% for address in addresses %}
                     <div class="form-check">
-                    <input class="form-check-input" type="radio" name="address" id="address">
+                    <input class="form-check-input" type="radio" name="address" id="address" value="{{address.id}}">
                     <label class="form-check-label" for="address">
                         {{address}} (<a href="#">edit</a>)
                     </label>
                   </div>
 
                 {% endfor %}
+                <input type='submit' value="select"/>
+                </form>
                 </div>
 
             </div>

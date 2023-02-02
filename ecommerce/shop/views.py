@@ -13,9 +13,10 @@ from .services import ShoppingCartServices
 
 
 def get_cart_summary(request):
+    items = []
     if "cart" in request.session:
         items_in = SubProduct.objects.in_bulk(request.session["cart"])
-        items = []
+
         for item in items_in:
             items.append(
                 {
@@ -23,8 +24,6 @@ def get_cart_summary(request):
                     "quantity": int(request.session["cart"][str(item)]["quantity"]),
                 }
             )
-    else:
-        items = None
     shipping = 5
     subtotal = 0
     for item in items:
@@ -113,6 +112,13 @@ class ShoppingCartRemoveItemView(View):
 
 class SelectAddressView(LoginRequiredMixin, View):
     def get(self, request):
+        address_id = request.GET.get("address", None)
+        print(address_id)
+        print("------------------------------------------iisisisis")
+        if address_id:
+            return HttpResponseRedirect(
+                reverse("shop:checkout", kwargs={"address": address_id})
+            )
         addresses = request.user.address_set.all()
         return render(request, "shop/select_address.html", {"addresses": addresses})
 
