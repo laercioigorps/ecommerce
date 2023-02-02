@@ -39,33 +39,10 @@ def get_cart_summary(request):
 
 class CartPageView(View):
     def get(self, request):
-        if "cart" in request.session:
-            items_in = SubProduct.objects.in_bulk(request.session["cart"])
-            items = []
-            for item in items_in:
-                items.append(
-                    {
-                        "item": items_in[item],
-                        "quantity": int(request.session["cart"][str(item)]["quantity"]),
-                    }
-                )
-        else:
-            items = None
-
-        shipping = 5
-        subtotal = 0
-        for item in items:
-            subtotal += item["item"].sale_price * int(item["quantity"])
-        total = subtotal + shipping
         return render(
             request,
             "shop/shopping_cart_page.html",
-            {
-                "items": items,
-                "shipping": shipping,
-                "subtotal": subtotal,
-                "total": total,
-            },
+            context=get_cart_summary(request),
         )
 
 
