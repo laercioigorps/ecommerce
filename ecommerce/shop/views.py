@@ -8,6 +8,7 @@ from ecommerce.products.models import SubProduct
 from ecommerce.users.models import Address
 
 from . import paypal_api
+from .models import Order, ShoppingCart
 from .services import ShoppingCartServices
 
 # Create your views here.
@@ -117,6 +118,7 @@ class CheckoutView(LoginRequiredMixin, View):
 
 class CreateOrderView(View):
     def post(self, request, address):
+        address = get_object_or_404(Address, pk=address)
         sumary = get_cart_summary(request)
         response = paypal_api.create_order(sumary["total"])
         return HttpResponse(response)
@@ -124,5 +126,26 @@ class CreateOrderView(View):
 
 class CaptureOrderView(View):
     def post(self, request, address, order_id):
+        address = get_object_or_404(Address, pk=address)
+        sumary = get_cart_summary(request)
         response = paypal_api.capture_order(order_id)
+        response_json = response.json()
+        cart = ShoppingCart.objects.create(owner=request.user, is_active=False)
+        for item in sumary["items"]:
+            ShoppingCartServices.add_or_update_cart_item(
+                cart, item["item"], item["quantity"]
+            )
+        if response_json["status"] in Order.Statuses:
+            Order.objects.create(
+                owner=request.user,
+                status=response_json["status"],
+                total=sumary["total"],
+                subtotal=sumary["subtotal"],
+                shipping=sumary["shipping"],
+                shipping_address=str(address),
+                cart=cart,
+            )
+            del request.session["cart"]
+        else:
+            return HttpResponse(status=400)
         return HttpResponse(response)
