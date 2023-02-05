@@ -1,8 +1,10 @@
 from django.urls import path
 
 from .views import (
+    CaptureOrderView,
     CartPageView,
     CheckoutView,
+    CreateOrderView,
     SelectAddressView,
     ShoppingCartAddItemView,
     ShoppingCartRemoveItemView,
@@ -31,5 +33,15 @@ urlpatterns = [
         "address/<int:address>/checkout/",
         view=CheckoutView.as_view(),
         name="checkout",
+    ),
+    path(
+        "address/<int:address>/create-order/",
+        view=CreateOrderView.as_view(),
+        name="create_order",
+    ),
+    path(
+        "address/<int:address>/capture-order/<str:order_id>/",
+        view=CaptureOrderView.as_view(),
+        name="capture",
     ),
 ]

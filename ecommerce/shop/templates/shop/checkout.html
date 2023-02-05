@@ -4,144 +4,324 @@
 {% extends "shopbase.html" %}
 {% load static %}
 {% load mathfilters %}
+{% block start_script%}
+<link
+      rel="stylesheet"
+      type="text/css"
+      href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"
+    />
+    <script
+    src="https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id={{client_id}}"
+    data-client-token="{{client_token}}"
+    ></script>
+{% endblock%}
+
+
+
 
 {% block content %}
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h6 class="coupon__link"><span class="icon_tag_alt"></span> <a href="#">Have a coupon?</a> Click
-                here to enter your code.</h6>
-            </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h6 class="coupon__link"><span class="icon_tag_alt"></span> <a href="#">Have a coupon?</a> Click
+          here to enter your code.</h6>
         </div>
-        <form action="#" class="checkout__form">
+      </div>
             <div class="row">
                 <div class="col-lg-8">
-                    <h5>Billing detail</h5>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>First Name <span>*</span></p>
-                                <input type="text">
-                            </div>
+                  <div id="paypal-button-container" class="paypal-button-container"></div>
+                  <div class="mb-4">
+                    <h6 class="text-center text-uppercase">Or</h6>
+                    <!-- Gradient divider -->
+                    <hr data-content="AND" class="hr-text">
+                  </div>
+                    <div class="card_container">
+                      <form id="card-form">
+                        <label for="card-number">Card Number</label>
+                        <div id="card-number" class="card_field"></div>
+                        <div style="display: flex; flex-direction: row;">
+                          <div>
+                            <label for="expiration-date">Expiration Date</label>
+                            <div id="expiration-date" class="card_field"></div>
+                          </div>
+                          <div style="margin-left: 10px;">
+                            <label for="cvv">CVV</label>
+                            <div id="cvv" class="card_field"></div>
+                          </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>Last Name <span>*</span></p>
-                                <input type="text">
-                            </div>
+                        <label for="card-holder-name">Name on Card</label>
+                        <input
+                          type="text"
+                          id="card-holder-name"
+                          name="card-holder-name"
+                          autocomplete="off"
+                          placeholder="card holder name"
+                        />
+                        <div>
+                          <label for="card-billing-address-street">Billing Address</label>
+                          <input
+                            type="text"
+                            id="card-billing-address-street"
+                            name="card-billing-address-street"
+                            autocomplete="off"
+                            placeholder="street address"
+                          />
                         </div>
-                        <div class="col-lg-12">
-                            <div class="checkout__form__input">
-                                <p>Country <span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Address <span>*</span></p>
-                                <input type="text" placeholder="Street Address">
-                                <input type="text" placeholder="Apartment. suite, unite ect ( optinal )">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Town/City <span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Country/State <span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Postcode/Zip <span>*</span></p>
-                                <input type="text">
-                            </div>
+                        <div>
+                          <label for="card-billing-address-unit">&nbsp;</label>
+                          <input
+                            type="text"
+                            id="card-billing-address-unit"
+                            name="card-billing-address-unit"
+                            autocomplete="off"
+                            placeholder="unit"
+                          />
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>Phone <span>*</span></p>
-                                <input type="text">
-                            </div>
+                        <div>
+                          <input
+                            type="text"
+                            id="card-billing-address-city"
+                            name="card-billing-address-city"
+                            autocomplete="off"
+                            placeholder="city"
+                          />
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>Email <span>*</span></p>
-                                <input type="text">
-                            </div>
+                        <div>
+                          <input
+                            type="text"
+                            id="card-billing-address-state"
+                            name="card-billing-address-state"
+                            autocomplete="off"
+                            placeholder="state"
+                          />
                         </div>
-                        <div class="col-lg-12">
-                            <div class="checkout__form__checkbox">
-                                <label for="acc">
-                                    Create an acount?
-                                    <input type="checkbox" id="acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <p>Create am acount by entering the information below. If you are a returing
-                                    customer login at the <br />top of the page</p>
-                                </div>
-                                <div class="checkout__form__input">
-                                    <p>Account Password <span>*</span></p>
-                                    <input type="text">
-                                </div>
-                                <div class="checkout__form__checkbox">
-                                    <label for="note">
-                                        Note about your order, e.g, special noe for delivery
-                                        <input type="checkbox" id="note">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="checkout__form__input">
-                                    <p>Oder notes <span>*</span></p>
-                                    <input type="text"
-                                    placeholder="Note about your order, e.g, special noe for delivery">
-                                </div>
-                            </div>
+                        <div>
+                          <input
+                            type="text"
+                            id="card-billing-address-zip"
+                            name="card-billing-address-zip"
+                            autocomplete="off"
+                            placeholder="zip / postal code"
+                          />
                         </div>
+                        <div>
+                          <input
+                            type="text"
+                            id="card-billing-address-country"
+                            name="card-billing-address-country"
+                            autocomplete="off"
+                            placeholder="country code"
+                          />
+                        </div>
+                        <br /><br />
+                        <div class="text-center">
+                          <button value="submit" id="submit" class="btn btn-success">Pay</button>
+                        </div>
+                      </form>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="checkout__order">
-                            <h5>Your order</h5>
-                            <div class="checkout__order__product">
-                                <ul>
-                                    <li>
-                                        <span class="top__text">Product</span>
-                                        <span class="top__text__right">Total</span>
-                                    </li>
-                                    {% for item in items %}
-                                    <li>{{ forloop.counter }}. {{item.item.product.name|slice:":25"}} x {{item.quantity}} <span>$ {{item.item.sale_price|mul:item.quantity}}</span></li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            <div class="checkout__order__total">
-                                <ul>
-                                    <li>Subtotal <span>$ {{subtotal|floatformat:"2g"}}</span></li>
-                                    <li>Shipping <span>$ {{shipping|floatformat:"2g"}}</span></li>
-                                    <li>Total <span>$ {{total|floatformat:"2g"}}</span></li>
-                                </ul>
-                            </div>
-                            <div class="checkout__order__widget">
-                                <label for="o-acc">
-                                    Create an acount?
-                                    <input type="checkbox" id="o-acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <p>Create am acount by entering the information below. If you are a returing customer
-                                login at the top of the page.</p>
-                                <label for="check-payment">
-                                    Cheque payment
-                                    <input type="checkbox" id="check-payment">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label for="paypal">
-                                    PayPal
-                                    <input type="checkbox" id="paypal">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <button type="submit" class="site-btn">Place oder</button>
-                        </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="checkout__order">
+                      <h5>Your order</h5>
+                      <div class="checkout__order__product">
+                      <ul>
+                        <li>
+                          <span class="top__text">Product</span>
+                          <span class="top__text__right">Total</span>
+                        </li>
+                        {% for item in items %}
+                          <li>{{ forloop.counter }}. {{item.item.product.name|slice:":25"}} x {{item.quantity}} <span>$ {{item.item.sale_price|mul:item.quantity}}</span></li>
+                        {% endfor %}
+                      </ul>
                     </div>
+                    <div class="checkout__order__total">
+                        <ul>
+                            <li>Subtotal <span>$ {{subtotal|floatformat:"2g"}}</span></li>
+                            <li>Shipping <span>$ {{shipping|floatformat:"2g"}}</span></li>
+                            <li>Total <span>$ {{total|floatformat:"2g"}}</span></li>
+                        </ul>
+                    </div>
+                    <div class="checkout__order__widget">
+                  </div>
                 </div>
-            </form>
-        </div>
-    </section>
+              </div>
+            </div>
+  </div>
+</section>
     <!-- Checkout Section End -->
+{% endblock%}
+
+{% block end_script %}
+<script>
+  paypal
+  .Buttons({
+    // Sets up the transaction when a payment button is clicked
+    createOrder: function () {
+      return fetch("{% url 'shop:create_order' address.id %}", {
+        method: "post",
+        headers: {
+          'x-csrftoken': '{{csrf_token}}'
+          },
+        mode: 'same-origin',
+        // use the "body" param to optionally pass additional order information
+        // like product skus and quantities
+      })
+        .then((response) => response.json())
+        .then((order) => order.id);
+    },
+    // Finalize the transaction after payer approval
+    onApprove: function (data) {
+      return fetch(`/shop/address/{{address.id}}/capture-order/${data.orderID}/`, {
+        method: "post",
+        headers: {
+          'x-csrftoken': '{{csrf_token}}'
+          },
+        mode: 'same-origin',
+      })
+        .then((response) => response.json())
+        .then((orderData) => {
+          // Successful capture! For dev/demo purposes:
+          console.log(
+            "Capture result",
+            orderData,
+            JSON.stringify(orderData, null, 2)
+          );
+          const transaction = orderData.purchase_units[0].payments.captures[0];
+          alert(`Transaction ${transaction.status}: ${transaction.id}
+            See console for all available details
+          `);
+          // When ready to go live, remove the alert and show a success message within this page. For example:
+          // var element = document.getElementById('paypal-button-container');
+          // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+          // Or go to another URL:  actions.redirect('thank_you.html');
+        });
+    },
+  })
+  .render("#paypal-button-container");
+
+// If this returns false or the card fields aren't visible, see Step #1.
+if (paypal.HostedFields.isEligible()) {
+  let orderId;
+
+  // Renders card fields
+  paypal.HostedFields.render({
+    // Call your server to set up the transaction
+    createOrder: () => {
+      return fetch("{% url 'shop:create_order' address.id %}", {
+        method: "post",
+        headers: {
+          'x-csrftoken': '{{csrf_token}}'
+          },
+        mode: 'same-origin',
+        // use the "body" param to optionally pass additional order information
+        // like product skus and quantities
+        body: JSON.stringify({
+          cart: [
+            {
+              sku: "<YOUR_PRODUCT_STOCK_KEEPING_UNIT>",
+              quantity: "<YOUR_PRODUCT_QUANTITY>",
+            },
+          ],
+        }),
+      })
+        .then((res) => res.json())
+        .then((orderData) => {
+          orderId = orderData.id; // needed later to complete capture
+          console.log(orderData)
+          return orderData.id;
+        });
+    },
+    styles: {
+      ".valid": {
+        color: "green",
+      },
+      ".invalid": {
+        color: "red",
+      },
+    },
+    fields: {
+      number: {
+        selector: "#card-number",
+        placeholder: "4111 1111 1111 1111",
+      },
+      cvv: {
+        selector: "#cvv",
+        placeholder: "123",
+      },
+      expirationDate: {
+        selector: "#expiration-date",
+        placeholder: "MM/YY",
+      },
+    },
+  }).then((cardFields) => {
+    document.querySelector("#card-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      cardFields
+        .submit({
+          // Cardholder's first and last name
+          cardholderName: document.getElementById("card-holder-name").value,
+          // Billing Address
+          billingAddress: {
+            // Street address, line 1
+            streetAddress: document.getElementById(
+              "card-billing-address-street"
+            ).value,
+            // Street address, line 2 (Ex: Unit, Apartment, etc.)
+            extendedAddress: document.getElementById(
+              "card-billing-address-unit"
+            ).value,
+            // State
+            region: document.getElementById("card-billing-address-state").value,
+            // City
+            locality: document.getElementById("card-billing-address-city")
+              .value,
+            // Postal Code
+            postalCode: document.getElementById("card-billing-address-zip")
+              .value,
+            // Country Code
+            countryCodeAlpha2: document.getElementById(
+              "card-billing-address-country"
+            ).value,
+          },
+        })
+        .then(() => {
+          fetch(`/shop/address/{{address.id}}/capture-order/${orderId}/`, {
+            method: "post",
+            headers: {
+              'x-csrftoken': '{{csrf_token}}'
+              },
+            mode: 'same-origin',
+          })
+            .then((res) => res.json())
+            .then((orderData) => {
+              // Two cases to handle:
+              //   (1) Other non-recoverable errors -> Show a failure message
+              //   (2) Successful transaction -> Show confirmation or thank you
+              // This example reads a v2/checkout/orders capture response, propagated from the server
+              // You could use a different API or structure for your 'orderData'
+              const errorDetail =
+                Array.isArray(orderData.details) && orderData.details[0];
+              if (errorDetail) {
+                var msg = "Sorry, your transaction could not be processed.";
+                if (errorDetail.description)
+                  msg += "\n\n" + errorDetail.description;
+                if (orderData.debug_id) msg += " (" + orderData.debug_id + ")";
+                return alert(msg); // Show a failure message
+              }
+              // Show a success message or redirect
+              alert("Transaction completed!");
+            });
+        })
+        .catch((err) => {
+          alert("Payment could not be captured! " + JSON.stringify(err));
+        });
+    });
+  });
+} else {
+  // Hides card fields if the merchant isn't eligible
+  document.querySelector("#card-form").style = "display: none";
+}
+</script>
 {% endblock%}

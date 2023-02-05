@@ -7,6 +7,7 @@ from django.views import View
 from ecommerce.products.models import SubProduct
 from ecommerce.users.models import Address
 
+from . import paypal_api
 from .services import ShoppingCartServices
 
 # Create your views here.
@@ -109,4 +110,19 @@ class CheckoutView(LoginRequiredMixin, View):
 
         details = get_cart_summary(request)
         details["address"] = address
+        details["client_id"] = paypal_api.CLIENT_ID
+        details["client_token"] = paypal_api.generateClientToken()
         return render(request, "shop/checkout.html", context=details)
+
+
+class CreateOrderView(View):
+    def post(self, request, address):
+        sumary = get_cart_summary(request)
+        response = paypal_api.create_order(sumary["total"])
+        return HttpResponse(response)
+
+
+class CaptureOrderView(View):
+    def post(self, request, address, order_id):
+        response = paypal_api.capture_order(order_id)
+        return HttpResponse(response)

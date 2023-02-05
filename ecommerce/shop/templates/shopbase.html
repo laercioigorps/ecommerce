@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="{% static 'shop/css/owl.carousel.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'shop/css/slicknav.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'shop/css/style.css' %}" type="text/css">
+    {% block start_script %}
+    {% endblock%}
 </head>
 
 <body>
@@ -207,6 +209,9 @@
     </div>
 </div>
 <!-- Search End -->
+<script>console.log("{{csrf_token}}")</script>
+
+
 
 <!-- Js Plugins -->
 <script src="{% static 'shop/js/jquery-3.3.1.min.js' %}"></script>
@@ -219,6 +224,12 @@
 <script src="{% static 'shop/js/owl.carousel.min.js' %}"></script>
 <script src="{% static 'shop/js/jquery.nicescroll.min.js' %}"></script>
 <script src="{% static 'shop/js/main.js' %}"></script>
+
+
+
+{% block end_script%}
+
+{% endblock %}
 </body>
 
 </html>
