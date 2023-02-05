@@ -1,10 +1,13 @@
 # import pytest
+from datetime import date
+
 import pytest
 
 from ecommerce.products.models import SubProduct
 from ecommerce.shop.models import ShoppingCart
 
-from ..models import ProductDetail
+from ..models import Order, ProductDetail
+from ..services import ShoppingCartServices
 
 
 def test_product_with_subproducts_fixture(product_with_many_sub_products):
@@ -125,3 +128,19 @@ def test_add_items_to_shopping_cart(user, product_with_many_sub_products):
 
 def test_shopping_cart_has_active_atribute_default_to_true(shoppingcart):
     assert shoppingcart.is_active
+
+
+@pytest.mark.django_db
+def test_create_order_with_valid_data(shoppingcart, subProduct):
+    ShoppingCartServices.add_or_update_cart_item(shoppingcart, subProduct, 3)
+    order = Order.objects.create(
+        owner=shoppingcart.owner,
+        total=300,
+        subtotal=280,
+        shipping=20,
+        shipping_address="something 1, pa etc",
+        status=Order.Statuses.CREATED,
+        cart=shoppingcart,
+    )
+    assert order.created_at.date() == date.today()
+    assert order.status == "CREATED"

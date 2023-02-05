@@ -48,3 +48,24 @@ class ShoppingCartItem(models.Model):
     cart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE)
     item = models.ForeignKey(SubProduct, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
+
+
+class Order(models.Model):
+    class Statuses(models.TextChoices):
+        CREATED = "CREATED"
+        SAVED = "SAVED"
+        APPROVED = "APPROVED"
+        VOIDED = "VOIDED"
+        COMPLETED = "COMPLETED"
+        PAYER_ACTION_REQUIRED = "PAYER_ACTION_REQUIRED"
+
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    subtotal = models.DecimalField(max_digits=7, decimal_places=2)
+    shipping = models.DecimalField(max_digits=6, decimal_places=2)
+    total = models.DecimalField(max_digits=7, decimal_places=2)
+    cart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(
+        max_length=25, choices=Statuses.choices, default=Statuses.CREATED
+    )
+    shipping_address = models.CharField(max_length=150)
