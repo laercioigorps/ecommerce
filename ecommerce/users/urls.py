@@ -1,5 +1,6 @@
 from django.urls import path
 
+from ecommerce.shop.views import ListOrderView
 from ecommerce.users.views import user_detail_view, user_redirect_view, user_update_view
 
 from .views import CreateAddressView, EditAddressView, ListCreateView
@@ -13,6 +14,7 @@ urlpatterns = [
         view=EditAddressView.as_view(),
         name="edit_address",
     ),
+    path("orders/", view=ListOrderView.as_view(), name="list_orders"),
     path("~redirect/", view=user_redirect_view, name="redirect"),
     path("~update/", view=user_update_view, name="update"),
     path("<str:username>/", view=user_detail_view, name="detail"),

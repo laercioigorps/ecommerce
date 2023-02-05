@@ -149,3 +149,9 @@ class CaptureOrderView(View):
         else:
             return HttpResponse(status=400)
         return HttpResponse(response)
+
+
+class ListOrderView(LoginRequiredMixin, View):
+    def get(self, request):
+        orders = Order.objects.filter(owner=request.user)
+        return render(request, "users/list_orders.html", context={"orders": orders})
