@@ -38,6 +38,19 @@ class ProductDetail(Page):
         return context
 
 
+class GenrePage(Page):
+    genre = models.CharField(max_length=20, choices=Product.GENRE_CHOICES)
+
+    content_panels = Page.content_panels + [
+        FieldPanel("genre"),
+    ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        context["pages"] = ProductDetail.objects.filter(product__genre=self.genre)
+        return context
+
+
 class ShoppingCart(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(SubProduct, through="ShoppingCartItem")
