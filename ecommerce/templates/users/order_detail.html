@@ -1,0 +1,35 @@
+{% extends "account/base.html" %}
+{% load static %}
+
+{% block title %}User: {{ object.username }}{% endblock %}
+{% block breadcrumb_links %}
+    <a href="/"><i class="fa fa-home"></i> Home</a>
+    <a href="{% url 'users:detail' request.user.username%}"></i> Accounts</a>
+    <a href="{% url 'users:list_orders'%}"></i> List Orders</a>
+    <span>Order detail</span>
+{% endblock %}
+{% block inner %}
+<section class="contact spad">
+  <div class="container">
+    <div class="card">
+      <h5 class="card-header">Order {{order.id}}</h5>
+      <div class="card-body">
+        <h5 class="card-title">{{order.status}}</h5>
+        <p class="card-text">Date: {{order.created_at}}</p>
+        <p class="card-text">Shipping Address: {{order.shipping_address}}</p>
+        <p class="card-text">Total: $ {{order.total|floatformat:'2g'}}</p>
+
+        {% for item in order.cart.shoppingcartitem_set.all%}
+          <div class="card">
+            <div class="card-body">
+              <p class="card-text">{{item.item.product.name}} - {{item.item.colour}} - {{item.item.size}} | quantity: {{item.quantity}}</p>
+            </div>
+          </div>
+        {% endfor%}
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- Contact Section End -->
+{% endblock inner %}

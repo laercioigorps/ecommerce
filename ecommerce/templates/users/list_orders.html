@@ -20,7 +20,7 @@
               <p class="card-text">{{order.shipping_address}}</p>
               <p class="card-text">Total: {{order.total}} | Items: {{order.cart.items.count}}</p>
               <p class="card-text">{{order.created_at}}</p>
-              <a href="#" class="btn btn-primary">Detail</a>
+              <a href="{% url 'users:order_detail' order.id %}" class="btn btn-primary">Detail</a>
             </div>
           </div>
         </div>

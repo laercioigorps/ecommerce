@@ -312,3 +312,38 @@ def test_list_user_orders_with_valid_user(client, user, subProduct):
     assertTemplateUsed(response, "users/list_orders.html")
     assert len(response.context["orders"]) == 1
     assert response.context["orders"][0].shipping_address == "something 1, pa etc"
+
+
+@pytest.mark.django_db
+def test_get_order_detail_with_anonymous_user(client):
+    response = client.get(reverse("users:order_detail", args=[999]))
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_get_invalid_order_detail(client, user):
+    client.force_login(user)
+    response = client.get(reverse("users:order_detail", args=[999]))
+    assert response.status_code == 404
+
+
+@pytest.mark.django_db
+def test_get_valid_order_detail(client, user, subProduct):
+    client.force_login(user)
+
+    cart = ShoppingCartServices.get_active_or_create(user)
+    ShoppingCartServices.add_or_update_cart_item(cart, subProduct, 2)
+    order = Order.objects.create(
+        owner=cart.owner,
+        total=300,
+        subtotal=280,
+        shipping=20,
+        shipping_address="something 1, pa etc",
+        status=Order.Statuses.CREATED,
+        cart=cart,
+    )
+
+    response = client.get(reverse("users:order_detail", args=[order.id]))
+    assert response.status_code == 200
+    assertTemplateUsed(response, "users/order_detail.html")
+    assert response.context["order"] == order

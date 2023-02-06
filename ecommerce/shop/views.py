@@ -155,3 +155,11 @@ class ListOrderView(LoginRequiredMixin, View):
     def get(self, request):
         orders = Order.objects.filter(owner=request.user)
         return render(request, "users/list_orders.html", context={"orders": orders})
+
+
+class OrderDetailView(LoginRequiredMixin, View):
+    def get(self, request, order_id):
+        order = get_object_or_404(Order, pk=order_id)
+        if order.owner != request.user:
+            return HttpResponse("You can not access this resource", status=404)
+        return render(request, "users/order_detail.html", {"order": order})
