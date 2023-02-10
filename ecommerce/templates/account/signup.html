@@ -4,8 +4,10 @@
 {% load crispy_forms_tags %}
 
 {% block head_title %}{% translate "Signup" %}{% endblock %}
-
+{% block breadcrumb_links %}{% endblock %}
+{% block account_menu %}{% endblock %}
 {% block inner %}
+<div class='col-lg-6 mx-auto text-center'>
 <h1>{% translate "Sign Up" %}</h1>
 
 <p>{% blocktranslate %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktranslate %}</p>
@@ -18,5 +20,6 @@
   {% endif %}
   <button class="btn btn-primary" type="submit">{% translate "Sign Up" %} &raquo;</button>
 </form>
+</div>
 
 {% endblock %}

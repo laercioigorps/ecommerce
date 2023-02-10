@@ -5,8 +5,10 @@
 {% load crispy_forms_tags %}
 
 {% block head_title %}{% translate "Sign In" %}{% endblock %}
-
+{% block breadcrumb_links %}{% endblock %}
+{% block account_menu %}{% endblock %}
 {% block inner %}
+<div class='col-lg-6 mx-auto text-center'>
 
 <h1>{% translate "Sign In" %}</h1>
 
@@ -55,5 +57,6 @@
   <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% translate "Forgot Password?" %}</a>
   <button class="primaryAction btn btn-primary" type="submit">{% translate "Sign In" %}</button>
 </form>
+</div>
 
 {% endblock %}
