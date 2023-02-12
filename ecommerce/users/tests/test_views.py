@@ -231,3 +231,19 @@ def test_edit_address_with_valid_user(client, user):
     assertRedirects(response, reverse("users:list_create_address"))
     assert Address.objects.count() == 1
     assert Address.objects.first().line_1 == "line 1 address edited"
+
+
+def test_create_address_with_redirect_url_paramether(client, user):
+    client.force_login(user)
+    response = client.post(
+        f"{reverse('users:list_create_address')}?redirect_url={reverse('shop:select_address')}",
+        data={
+            "line_1": "address line 1",
+            "line_2": "address line 1",
+            "city": "city",
+            "state": "state",
+            "postal_code": "postal_code",
+            "country_code": "US",
+        },
+    )
+    assertRedirects(response, reverse("shop:select_address"))
