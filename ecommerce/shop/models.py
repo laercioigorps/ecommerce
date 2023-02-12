@@ -47,7 +47,29 @@ class GenrePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        context["pages"] = ProductDetail.objects.filter(product__genre=self.genre)
+        pages = ProductDetail.objects.filter(product__genre=self.genre)
+        min_price = request.GET.get("minamount", None)
+        max_price = request.GET.get("maxamount", None)
+        sizes = request.GET.getlist("size")
+        colours = request.GET.getlist("colour")
+        if min_price:
+            pages = pages.filter(
+                product__subproducts__sale_price__gte=min_price
+            ).distinct()
+        if max_price:
+            pages = pages.filter(
+                product__subproducts__sale_price__lte=max_price
+            ).distinct()
+        if sizes:
+            pages = pages.filter(product__subproducts__size__name__in=sizes)
+        if colours:
+            pages = pages.filter(product__subproducts__colour__name__in=colours)
+
+        context["pages"] = pages[:10]
+        context["filtered_colours"] = colours
+        context["filtered_sizes"] = sizes
+        context["filtered_maxprice"] = max_price
+        context["filtered_minprice"] = min_price
         return context
 
 
