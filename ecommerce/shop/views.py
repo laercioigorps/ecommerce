@@ -163,3 +163,8 @@ class OrderDetailView(LoginRequiredMixin, View):
         if order.owner != request.user:
             return HttpResponse("You can not access this resource", status=404)
         return render(request, "users/order_detail.html", {"order": order})
+
+
+class ThankYouPageView(View):
+    def get(self, request):
+        return render(request, "shop/thank_you_page.html")

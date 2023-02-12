@@ -8,6 +8,7 @@ from .views import (
     SelectAddressView,
     ShoppingCartAddItemView,
     ShoppingCartRemoveItemView,
+    ThankYouPageView,
 )
 
 app_name = "shop"
@@ -43,5 +44,10 @@ urlpatterns = [
         "address/<int:address>/capture-order/<str:order_id>/",
         view=CaptureOrderView.as_view(),
         name="capture",
+    ),
+    path(
+        "thank-you/",
+        view=ThankYouPageView.as_view(),
+        name="thank_you",
     ),
 ]
