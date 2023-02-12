@@ -236,7 +236,7 @@ def test_edit_address_with_valid_user(client, user):
 def test_create_address_with_redirect_url_paramether(client, user):
     client.force_login(user)
     response = client.post(
-        f"{reverse('users:list_create_address')}?redirect_url={reverse('shop:select_address')}",
+        reverse("users:list_create_address"),
         data={
             "line_1": "address line 1",
             "line_2": "address line 1",
@@ -244,6 +244,7 @@ def test_create_address_with_redirect_url_paramether(client, user):
             "state": "state",
             "postal_code": "postal_code",
             "country_code": "US",
+            "redirect_url": reverse("shop:select_address"),
         },
     )
     assertRedirects(response, reverse("shop:select_address"))

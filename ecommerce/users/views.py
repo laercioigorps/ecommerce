@@ -62,7 +62,7 @@ class ListCreateView(LoginRequiredMixin, View):
             address.owner = request.user
             address.save()
 
-            redirect_url = request.GET.get("redirect_url", None)
+            redirect_url = request.POST.get("redirect_url", None)
             if not redirect_url:
                 redirect_url = reverse("users:list_create_address")
             return HttpResponseRedirect(redirect_url)
