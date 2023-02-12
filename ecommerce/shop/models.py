@@ -1,3 +1,4 @@
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from wagtail.admin.panels import FieldPanel
 from wagtail.models import Page
@@ -47,7 +48,7 @@ class GenrePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        pages = ProductDetail.objects.filter(product__genre=self.genre)
+        pages = ProductDetail.objects.live().public().filter(product__genre=self.genre)
         min_price = request.GET.get("minamount", None)
         max_price = request.GET.get("maxamount", None)
         sizes = request.GET.getlist("size")
@@ -64,8 +65,19 @@ class GenrePage(Page):
             pages = pages.filter(product__subproducts__size__name__in=sizes)
         if colours:
             pages = pages.filter(product__subproducts__colour__name__in=colours)
-
-        context["pages"] = pages[:10]
+        paginator = Paginator(pages, 12)
+        page = request.GET.get("page")
+        try:
+            # If the page exists and the ?page=x is an int
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            # If the ?page=x is not an int; show the first page
+            posts = paginator.page(1)
+        except EmptyPage:
+            # If the ?page=x is out of range (too high most likely)
+            # Then return the last page
+            posts = paginator.page(paginator.num_pages)
+        context["pages"] = posts
         context["filtered_colours"] = colours
         context["filtered_sizes"] = sizes
         context["filtered_maxprice"] = max_price
