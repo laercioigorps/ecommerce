@@ -6,10 +6,10 @@
         <div class="categories__accordion">
             <div class="accordion" id="accordionExample">
                 <div class="card">
-                    <div class="card-heading active">
+                    <div class="card-heading " >
                         <a data-toggle="collapse" data-target="#collapseOne">Women</a>
                     </div>
-                    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                    <div id="collapseOne" class="collapse {% if genre == 'W' %}show{% endif %}" data-parent="#accordionExample">
                         <div class="card-body">
                             <ul>
                                 <li><a href="/women/sandals/">Sandals</a></li>
@@ -23,7 +23,7 @@
                     <div class="card-heading">
                         <a data-toggle="collapse" data-target="#collapseTwo">Men</a>
                     </div>
-                    <div id="collapseTwo" class="collapse" data-parent="#accordionExample">
+                    <div id="collapseTwo" class="collapse {% if genre == 'M' %}show{% endif %}" data-parent="#accordionExample">
                         <div class="card-body">
                             <ul>
                                 <li><a href="/men/sandals/">Sandals</a></li>
@@ -37,7 +37,7 @@
                     <div class="card-heading">
                         <a data-toggle="collapse" data-target="#collapseThree">Girls</a>
                     </div>
-                    <div id="collapseThree" class="collapse" data-parent="#accordionExample">
+                    <div id="collapseThree" class="collapse {% if genre == 'G' %}show{% endif %}" data-parent="#accordionExample">
                         <div class="card-body">
                             <ul>
                                 <li><a href="/girls/socks/">Socks</a></li>
@@ -54,7 +54,7 @@
                     <div class="card-heading">
                         <a data-toggle="collapse" data-target="#collapseFour">Boys</a>
                     </div>
-                    <div id="collapseFour" class="collapse" data-parent="#accordionExample">
+                    <div id="collapseFour" class="collapse {% if genre == 'B' %}show{% endif %}" data-parent="#accordionExample">
                         <div class="card-body">
                             <ul>
                                 <li><a href="/boys/socks/">Socks</a></li>

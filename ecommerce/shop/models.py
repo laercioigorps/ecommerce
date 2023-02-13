@@ -82,6 +82,7 @@ class GenrePage(Page):
         context["filtered_sizes"] = sizes
         context["filtered_maxprice"] = max_price
         context["filtered_minprice"] = min_price
+        context["genre"] = self.genre
         return context
 
 
@@ -94,11 +95,12 @@ class GenreCategoryPage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
+        genre = self.get_parent().specific.genre
         pages = (
             ProductDetail.objects.live()
             .public()
             .filter(product__category=self.category)
-            .filter(product__genre=self.get_parent().specific.genre)
+            .filter(product__genre=genre)
         )
         min_price = request.GET.get("minamount", None)
         max_price = request.GET.get("maxamount", None)
@@ -135,6 +137,7 @@ class GenreCategoryPage(Page):
         context["filtered_sizes"] = sizes
         context["filtered_maxprice"] = max_price
         context["filtered_minprice"] = min_price
+        context["genre"] = genre
         return context
 
 
