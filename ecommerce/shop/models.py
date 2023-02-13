@@ -3,7 +3,7 @@ from django.db import models
 from wagtail.admin.panels import FieldPanel
 from wagtail.models import Page
 
-from ecommerce.products.models import Product, SubProduct
+from ecommerce.products.models import Category, Product, SubProduct
 from ecommerce.users.models import User
 
 
@@ -77,6 +77,59 @@ class GenrePage(Page):
             # If the ?page=x is out of range (too high most likely)
             # Then return the last page
             posts = paginator.page(paginator.num_pages)
+        context["pages"] = posts
+        context["filtered_colours"] = colours
+        context["filtered_sizes"] = sizes
+        context["filtered_maxprice"] = max_price
+        context["filtered_minprice"] = min_price
+        return context
+
+
+class GenreCategoryPage(Page):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    template = "shop/genre_page.html"
+    content_panels = Page.content_panels + [
+        FieldPanel("category"),
+    ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        pages = (
+            ProductDetail.objects.live()
+            .public()
+            .filter(product__category=self.category)
+            .filter(product__genre=self.get_parent().specific.genre)
+        )
+        min_price = request.GET.get("minamount", None)
+        max_price = request.GET.get("maxamount", None)
+        sizes = request.GET.getlist("size")
+        colours = request.GET.getlist("colour")
+        if min_price:
+            pages = pages.filter(
+                product__subproducts__sale_price__gte=min_price
+            ).distinct()
+        if max_price:
+            pages = pages.filter(
+                product__subproducts__sale_price__lte=max_price
+            ).distinct()
+        if sizes:
+            pages = pages.filter(product__subproducts__size__name__in=sizes)
+        if colours:
+            pages = pages.filter(product__subproducts__colour__name__in=colours)
+        paginator = Paginator(pages, 12)
+        page = request.GET.get("page")
+        try:
+            # If the page exists and the ?page=x is an int
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            # If the ?page=x is not an int; show the first page
+            posts = paginator.page(1)
+        except EmptyPage:
+            # If the ?page=x is out of range (too high most likely)
+            # Then return the last page
+            posts = paginator.page(paginator.num_pages)
+
+        context["parent_page"] = self.get_parent()
         context["pages"] = posts
         context["filtered_colours"] = colours
         context["filtered_sizes"] = sizes
