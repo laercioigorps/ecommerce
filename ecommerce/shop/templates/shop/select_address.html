@@ -10,22 +10,26 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-
-                <h2>select address</h2>
+                {% if addresses %}
+                <h2>Select address</h2>
                 <div class="mt-4">
                     <form>
-                {% for address in addresses %}
-                    <div class="form-check">
-                    <input class="form-check-input" type="radio" name="address" id="address" value="{{address.id}}">
-                    <label class="form-check-label" for="address">
-                        {{address}} (<a href="#">edit</a>)
-                    </label>
-                  </div>
-
-                {% endfor %}
-                <input type='submit' value="select"/>
-                </form>
+                        {% for address in addresses %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="address" id="address" value="{{address.id}}">
+                                <label class="form-check-label" for="address">
+                                    {{address}} (<a href="#">edit</a>)
+                                </label>
+                            </div>
+                        {% endfor %}
+                        <input type='submit' value="select"/>
+                    </form>
                 </div>
+                {% else%}
+                    <h2>Hi, You don't have a shipping address registered :)</h2>
+
+                    <a  class="mt-4" href="{% url 'users:create_address'%}?redirect_url={% url 'shop:select_address' %}">click here to add</a>!
+                {% endif %}
 
             </div>
         </div>

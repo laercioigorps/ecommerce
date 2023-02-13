@@ -63,8 +63,12 @@ class ListCreateView(LoginRequiredMixin, View):
             address.save()
 
             redirect_url = request.POST.get("redirect_url", None)
-            if not redirect_url:
+            print("sgdffd---------------------------------sdfs\n")
+            print(redirect_url)
+            if redirect_url is None:
                 redirect_url = reverse("users:list_create_address")
+            print("sgdffd---------------------------------sdfs\n")
+            print(redirect_url)
             return HttpResponseRedirect(redirect_url)
 
     def get(self, request):
@@ -77,7 +81,12 @@ class ListCreateView(LoginRequiredMixin, View):
 class CreateAddressView(View):
     def get(self, request):
         form = AddressForm()
-        return render(request, "users/address_form.html", {"form": form})
+        redirect_url = request.GET.get("redirect_url", None)
+        return render(
+            request,
+            "users/address_form.html",
+            {"form": form, "redirect_url": redirect_url},
+        )
 
 
 class EditAddressView(LoginRequiredMixin, View):

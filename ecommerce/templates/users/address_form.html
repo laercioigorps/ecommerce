@@ -20,7 +20,10 @@
         >
             {% csrf_token %}
             {{form|crispy}}
-            <input class="btn-success" type="submit" value="Add"/>
+            {% if redirect_url %}
+                <input name="redirect_url" type='hidden' value="{{redirect_url}}"/>
+            {% endif %}
+            <input  class="btn-success" type="submit" value="Add"/>
         </form>
       </div>
   </div>

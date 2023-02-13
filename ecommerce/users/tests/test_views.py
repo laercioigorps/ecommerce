@@ -248,3 +248,11 @@ def test_create_address_with_redirect_url_paramether(client, user):
         },
     )
     assertRedirects(response, reverse("shop:select_address"))
+
+
+def test_get_create_address_page_with_redirect_url_paramether_has_context(client, user):
+    client.force_login(user)
+    response = client.get(
+        f'{reverse("users:create_address")}?redirect_url={reverse("shop:select_address")}'
+    )
+    assert response.context["redirect_url"] == reverse("shop:select_address")
