@@ -99,10 +99,14 @@
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>
                             <li><a href="#"><span class="icon_heart_alt"></span>
-                                <div class="tip">2</div>
+                                <div class="tip">0</div>
                             </a></li>
                             <li><a href="{% url 'shop:cart_page' %}"><span class="icon_bag_alt"></span>
-                                <div class="tip">2</div>
+                                {% if request.session.cart %}
+                                    <div class="tip">{{request.session.cart.items|length}}</div>
+                                {% else %}
+                                <div class="tip">{{request.session.cart.items|length}}</div>
+                                {% endif %}
                             </a></li>
                         </ul>
                     </div>
